@@ -69,8 +69,32 @@
                                 @endforeach
                             </ul>
                         </li>
-                        <li class="nav-item"><a class="nav-link py-2 py-lg-0" href="#">Name Change</a></li>
-                        <li class="nav-item"><a class="nav-link py-2 py-lg-0" href="#">Refund Policy</a></li>
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle py-2 py-lg-0" href="{{ route('name-change.index') }}" id="nameChangeDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+                                Name Change <i class="fas fa-angle-down ms-1 d-none d-lg-inline"></i>
+                            </a>
+                            <ul class="dropdown-menu shadow border-0 fade-down" aria-labelledby="nameChangeDropdown">
+                                @php
+                                    $ncDropdown = \App\Http\Controllers\NameChangeController::getAirlines();
+                                @endphp
+                                @foreach($ncDropdown as $slug => $data)
+                                    <li><a class="dropdown-item" href="{{ route('name-change.show', $slug) }}">{{ $data['name'] }}</a></li>
+                                @endforeach
+                            </ul>
+                        </li>
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle py-2 py-lg-0" href="{{ route('reservation-policy.index') }}" id="reservationPolicyDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+                                Reservation Policy <i class="fas fa-angle-down ms-1 d-none d-lg-inline"></i>
+                            </a>
+                            <ul class="dropdown-menu shadow border-0 fade-down" aria-labelledby="reservationPolicyDropdown">
+                                @php
+                                    $rpDropdown = \App\Http\Controllers\ReservationPolicyController::getAirlines();
+                                @endphp
+                                @foreach($rpDropdown as $slug => $data)
+                                    <li><a class="dropdown-item" href="{{ route('reservation-policy.show', $slug) }}">{{ $data['name'] }}</a></li>
+                                @endforeach
+                            </ul>
+                        </li>                     
                         <li class="nav-item"><a class="nav-link py-2 py-lg-0" href="#">Blog</a></li>
                     </ul>
                     
@@ -94,23 +118,32 @@
 <footer class="custom-footer py-5" style="background-color: #0b1121;">
     <div class="container pt-4 pb-2">
         <div class="row g-4 justify-content-between">
-            <div class="col-lg-4 col-md-6 pe-lg-5">
+            <div class="col-md-3 pe-lg-3">
                 <a class="navbar-brand brand-logo d-inline-block mb-4" href="/">
-                    <img src="{{ asset('images/download.png') }}" alt="FlyingRules Logo" style="width: 180px; object-fit: contain;">
+                    <img src="{{ asset('images/download.png') }}" alt="FlyingRules Logo" style="width: 160px; object-fit: contain;">
                 </a>
-                <p class="text-light opacity-75 small lh-lg mb-0">Your one-stop destination for all airline policies. We make understanding complex airline rules easy and accessible. Experience luxury travel without the hassle.</p>
+                <p class="text-light opacity-75 small lh-lg mb-0">Your one-stop destination for all airline policies. We make understanding complex airline rules easy and accessible.</p>
             </div>
             
-            <div class="col-lg-3 col-md-6">
+            <div class="col-md-3">
                 <h5 class="footer-title text-white fw-bold mb-4 pb-2 position-relative">Quick Links</h5>
                 <ul class="list-unstyled footer-links m-0">
                     <li class="mb-3"><a href="{{ route('cancellation.index') }}" class="text-light opacity-75 text-decoration-none d-flex align-items-center hover-cyan"><i class="fas fa-chevron-right text-cyan me-3 small"></i> Cancellation Policy</a></li>
                     <li class="mb-3"><a href="{{ route('flight-change.index') }}" class="text-light opacity-75 text-decoration-none d-flex align-items-center hover-cyan"><i class="fas fa-chevron-right text-cyan me-3 small"></i> Flight Change Policy</a></li>
-                    <li class="mb-3"><a href="#" class="text-light opacity-75 text-decoration-none d-flex align-items-center hover-cyan"><i class="fas fa-chevron-right text-cyan me-3 small"></i> Baggage Policy</a></li>
+                    <li class="mb-3"><a href="{{ route('name-change.index') }}" class="text-light opacity-75 text-decoration-none d-flex align-items-center hover-cyan"><i class="fas fa-chevron-right text-cyan me-3 small"></i> Name Change Policy</a></li>
+                </ul>
+            </div>
+
+            <div class="col-md-3">
+                <h5 class="footer-title text-white fw-bold mb-4 pb-2 position-relative">Our Services</h5>
+                <ul class="list-unstyled footer-links m-0">
+                    <li class="mb-3"><a href="{{ route('reservation-policy.index') }}" class="text-light opacity-75 text-decoration-none d-flex align-items-center hover-cyan"><i class="fas fa-chevron-right text-cyan me-3 small"></i> Reservation Policy</a></li>
+                    <li class="mb-3"><a href="{{ route('baggage-policy.index') }}" class="text-light opacity-75 text-decoration-none d-flex align-items-center hover-cyan"><i class="fas fa-chevron-right text-cyan me-3 small"></i> Baggage Policy</a></li>
+                    <li class="mb-3"><a href="{{ route('refund-policy.index') }}" class="text-light opacity-75 text-decoration-none d-flex align-items-center hover-cyan"><i class="fas fa-chevron-right text-cyan me-3 small"></i> Refund Policy</a></li>
                 </ul>
             </div>
             
-            <div class="col-lg-4 col-md-6">
+            <div class="col-md-3">
                 <h5 class="footer-title text-white fw-bold mb-4 pb-2 position-relative">Contact Us</h5>
                 <ul class="list-unstyled footer-links m-0 small">
                     <li class="mb-3"><a href="tel:+18001234567" class="text-light opacity-75 text-decoration-none d-flex align-items-center hover-cyan"><i class="fas fa-phone me-3 opacity-75"></i> +1-800-123-4567</a></li>
