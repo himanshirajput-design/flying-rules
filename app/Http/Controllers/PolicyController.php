@@ -55,6 +55,17 @@ class PolicyController extends Controller
         }
 
         $airlineData = $airlines[$airline];
-        return view('cancellation.show', compact('airlineData'));
+        
+        $relatedAirlines = [];
+        $count = 0;
+        foreach($airlines as $slug => $data) {
+            if ($slug !== $airline && $count < 3) {
+                $data['link'] = route('cancellation.show', $slug);
+                $relatedAirlines[] = $data;
+                $count++;
+            }
+        }
+
+        return view('cancellation.show', compact('airlineData', 'relatedAirlines'));
     }
 }

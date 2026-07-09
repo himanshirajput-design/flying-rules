@@ -9,7 +9,7 @@
             <h1 class="display-4 fw-bold mb-3">{{ $airlineData['name'] }}</h1>
             <div class="breadcrumb text-light fs-5 opacity-75">
                 <a href="/" class="text-white text-decoration-none hover-cyan">FlightRules</a> &nbsp;&gt;&nbsp; 
-                <a href="{{ route('cancellation.index') }}" class="text-white text-decoration-none hover-cyan">Cancellation Policy</a> &nbsp;&gt;&nbsp; 
+                <a href="{{ route('flight-change.index') }}" class="text-white text-decoration-none hover-cyan">Flight Change Policy</a> &nbsp;&gt;&nbsp; 
                 <span>{{ explode(' ', $airlineData['name'])[0] }}</span>
             </div>
         </div>
@@ -28,73 +28,69 @@
                     <img src="{{ $airlineData['image'] }}" alt="{{ $airlineData['name'] }}" class="w-100 h-100 object-fit-cover transition-scale">
                 </div>
 
+
+                <h2 class="fw-bold text-dark-blue mb-4">What is the Flight Change Policy?</h2>
+                
+                <p class="text-muted lh-lg mb-4">
+                    Airlines have modernized their flight change policies to give passengers more flexibility. For most standard and premium tickets, you can now change your flight date, time, or destination without paying a hefty change fee. You will only be responsible for paying the fare difference if your new flight is more expensive than your original booking.
+                </p>
+                
                 <!-- Quick Overview Section -->
                 <div class="bg-light-cyan p-4 rounded-4 shadow-sm mb-5 border-start border-4 border-cyan">
                     <h4 class="fw-bold text-dark-blue mb-4"><i class="fas fa-bolt text-cyan me-2"></i> Quick Overview</h4>
                     <ul class="list-unstyled mb-0">
-                        <li class="mb-3 d-flex align-items-start"><i class="fas fa-check text-cyan mt-1 me-3"></i> <span class="text-muted"><strong>24-Hour Rule:</strong> Free cancellation within 24 hours of booking for most tickets.</span></li>
-                        <li class="mb-3 d-flex align-items-start"><i class="fas fa-check text-cyan mt-1 me-3"></i> <span class="text-muted"><strong>Basic Economy:</strong> Non-refundable and non-changeable after the grace period.</span></li>
-                        <li class="mb-3 d-flex align-items-start"><i class="fas fa-check text-cyan mt-1 me-3"></i> <span class="text-muted"><strong>Refundable Tickets:</strong> Fully refundable at any time before departure.</span></li>
-                        <li class="mb-0 d-flex align-items-start"><i class="fas fa-check text-cyan mt-1 me-3"></i> <span class="text-muted"><strong>Processing Time:</strong> Refunds take 7-10 business days to original payment method.</span></li>
+                        <li class="mb-3 d-flex align-items-start"><i class="fas fa-check text-cyan mt-1 me-3"></i> <span class="text-muted"><strong>No Change Fees:</strong> Most standard tickets can be changed without penalty fees.</span></li>
+                        <li class="mb-3 d-flex align-items-start"><i class="fas fa-check text-cyan mt-1 me-3"></i> <span class="text-muted"><strong>Fare Differences:</strong> You are responsible for any difference if the new flight is more expensive.</span></li>
+                        <li class="mb-3 d-flex align-items-start"><i class="fas fa-check text-cyan mt-1 me-3"></i> <span class="text-muted"><strong>Basic Economy:</strong> Typically non-changeable after booking.</span></li>
+                        <li class="mb-0 d-flex align-items-start"><i class="fas fa-check text-cyan mt-1 me-3"></i> <span class="text-muted"><strong>Travel Credits:</strong> Remaining balances are usually issued as eCredits.</span></li>
                     </ul>
                 </div>
 
-                <h2 class="fw-bold text-dark-blue mb-4">What is the 24-Hour Cancellation Policy?</h2>
-                
-                <p class="text-muted lh-lg mb-4">
-                    Most airlines offer a 24-hour cancellation policy, allowing passengers to cancel their booking within 24 hours of purchase without incurring any cancellation fees, provided the ticket was booked at least seven days before the flight's departure. This rule is mandated by the U.S. Department of Transportation for flights operating to, from, or within the United States.
-                </p>
-
-                <div class="alert bg-light-cyan border-0 border-start border-4 border-cyan text-dark-blue p-4 mb-5 rounded-end-4 shadow-sm">
-                    <h5 class="fw-bold"><i class="fas fa-info-circle text-cyan me-2"></i> Important Note</h5>
-                    <p class="mb-0">If you booked through a third-party travel agency, you must contact them directly to process your cancellation. The airline's direct 24-hour rule may not apply to agency bookings depending on their specific terms.</p>
-                </div>
-
-                <h3 class="fw-bold text-dark-blue mb-4">Fare Types & Cancellation Rules</h3>
+                <h3 class="fw-bold text-dark-blue mb-4">Fare Types & Change Rules</h3>
                 
                 <h5 class="fw-bold text-cyan mt-4">Basic Economy Tickets</h5>
-                <p class="text-muted lh-lg">Basic Economy tickets are generally strictly non-refundable and non-changeable after the 24-hour grace period. If you cancel, you will not receive a refund or travel credit.</p>
+                <p class="text-muted lh-lg">Basic Economy tickets are generally strictly non-changeable. You cannot modify the date or time of these flights once the 24-hour grace period has passed.</p>
                 
                 <h5 class="fw-bold text-cyan mt-4">Main Cabin / Standard Tickets</h5>
-                <p class="text-muted lh-lg">Standard tickets can often be cancelled prior to departure. While they may not be fully refundable to your original form of payment, the value of the ticket (minus any applicable cancellation fees) is typically issued as an eCredit for future travel.</p>
+                <p class="text-muted lh-lg">Standard tickets can be changed with no change fees. However, you must pay any applicable fare difference. Changes can usually be made up until the time of departure.</p>
 
                 <h5 class="fw-bold text-cyan mt-4">Refundable / First Class Tickets</h5>
-                <p class="text-muted lh-lg mb-5">Fully refundable tickets allow you to cancel at any time before departure and receive a full refund to your original payment method without any penalty fees.</p>
+                <p class="text-muted lh-lg mb-5">Fully refundable tickets offer the most flexibility, allowing unlimited changes without penalty fees, subject to fare differences.</p>
 
-                <h3 class="fw-bold text-dark-blue mb-4">How To Cancel Your Flight Online</h3>
+                <h3 class="fw-bold text-dark-blue mb-4">How To Change Your Flight Online</h3>
                 <ul class="list-unstyled text-muted lh-lg mb-5">
                     <li class="mb-3"><i class="fas fa-check-circle text-cyan me-2"></i> Visit the airline's official website and navigate to "Manage Booking" or "My Trips".</li>
                     <li class="mb-3"><i class="fas fa-check-circle text-cyan me-2"></i> Enter your confirmation number (PNR) and the passenger's last name.</li>
-                    <li class="mb-3"><i class="fas fa-check-circle text-cyan me-2"></i> Select the flight you wish to cancel and click on the "Cancel Flight" option.</li>
-                    <li class="mb-3"><i class="fas fa-check-circle text-cyan me-2"></i> Review the estimated refund or eCredit amount, and confirm the cancellation.</li>
+                    <li class="mb-3"><i class="fas fa-check-circle text-cyan me-2"></i> Select the flight you wish to change and click on the "Change Flight" option.</li>
+                    <li class="mb-3"><i class="fas fa-check-circle text-cyan me-2"></i> Search for your new preferred flight, pay any fare difference, and confirm your new itinerary.</li>
                 </ul>
 
-                <!-- Cancellation Fee Table -->
-                <h3 class="fw-bold text-dark-blue mb-4">How Much Are the Cancellation Fees?</h3>
+                <!-- Change Fee Table -->
+                <h3 class="fw-bold text-dark-blue mb-4">How Much Are the Change Fees?</h3>
                 <div class="table-responsive mb-5">
                     <table class="table table-bordered table-striped align-middle shadow-sm">
                         <thead class="bg-dark-blue text-white">
                             <tr>
                                 <th class="p-3">Ticket Type</th>
-                                <th class="p-3">Before Departure</th>
-                                <th class="p-3">After Departure</th>
+                                <th class="p-3">Change Fee</th>
+                                <th class="p-3">Fare Difference</th>
                             </tr>
                         </thead>
                         <tbody class="text-muted">
                             <tr>
                                 <td class="p-3 fw-bold">Basic Economy</td>
-                                <td class="p-3">Not Permitted</td>
-                                <td class="p-3">Not Permitted</td>
+                                <td class="p-3">Changes Not Permitted</td>
+                                <td class="p-3">N/A</td>
                             </tr>
                             <tr>
                                 <td class="p-3 fw-bold">Main Cabin / Standard</td>
-                                <td class="p-3">$100 - $200 (Issued as eCredit)</td>
-                                <td class="p-3">Not Permitted</td>
+                                <td class="p-3">$0 (No Fee)</td>
+                                <td class="p-3">Applies</td>
                             </tr>
                             <tr>
                                 <td class="p-3 fw-bold">Refundable / First Class</td>
-                                <td class="p-3">Free (Full Refund)</td>
-                                <td class="p-3">Free (Depending on route)</td>
+                                <td class="p-3">$0 (No Fee)</td>
+                                <td class="p-3">Applies</td>
                             </tr>
                         </tbody>
                     </table>
@@ -106,24 +102,24 @@
                     <div class="accordion-item border-0 border-bottom">
                         <h2 class="accordion-header" id="headingOne">
                             <button class="accordion-button bg-light fw-bold text-dark-blue" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
-                                Can I cancel my flight if I have a medical emergency?
+                                What happens if the airline changes my flight schedule?
                             </button>
                         </h2>
                         <div id="collapseOne" class="accordion-collapse collapse show" aria-labelledby="headingOne" data-bs-parent="#policyFaq">
                             <div class="accordion-body text-muted lh-lg">
-                                Yes, most airlines have a compassionate cancellation policy. You will need to provide valid medical documentation, and the airline may waive cancellation fees or provide a full travel credit.
+                                If the airline makes a significant schedule change to your flight (usually more than 1-2 hours), you are entitled to change your flight to a more convenient time for free, or cancel for a full refund.
                             </div>
                         </div>
                     </div>
                     <div class="accordion-item border-0 border-bottom">
                         <h2 class="accordion-header" id="headingTwo">
                             <button class="accordion-button collapsed bg-light fw-bold text-dark-blue" type="button" data-bs-toggle="collapse" data-bs-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
-                                How long does it take to process a refund?
+                                Can I change my flight on the same day?
                             </button>
                         </h2>
                         <div id="collapseTwo" class="accordion-collapse collapse" aria-labelledby="headingTwo" data-bs-parent="#policyFaq">
                             <div class="accordion-body text-muted lh-lg">
-                                Refunds to original forms of payment (like credit cards) usually take 7-10 business days to appear on your statement. Travel credits (eCredits) are typically issued immediately upon cancellation.
+                                Yes, most airlines offer "Same-Day Confirmed" or "Same-Day Standby" options. These may require a nominal fee (usually around $75) unless you hold elite elite status.
                             </div>
                         </div>
                     </div>
@@ -173,13 +169,13 @@
                     </div>
                     <div class="card-body p-4 bg-light rounded-bottom-4">
                         <ul class="list-unstyled mb-0 toc-list">
-                            <li class="mb-3"><a href="#" class="text-decoration-none text-muted hover-cyan"><i class="fas fa-angle-right me-2 small"></i> 24-Hour Cancellation Policy</a></li>
+                            <li class="mb-3"><a href="#" class="text-decoration-none text-muted hover-cyan"><i class="fas fa-angle-right me-2 small"></i> Flight Change Policy</a></li>
                             <li class="mb-3"><a href="#" class="text-decoration-none text-muted hover-cyan"><i class="fas fa-angle-right me-2 small"></i> Fare Types & Rules</a></li>
                             <li class="mb-3"><a href="#" class="text-decoration-none text-muted hover-cyan"><i class="fas fa-angle-right me-2 small"></i> Basic Economy Tickets</a></li>
                             <li class="mb-3"><a href="#" class="text-decoration-none text-muted hover-cyan"><i class="fas fa-angle-right me-2 small"></i> Standard Tickets</a></li>
                             <li class="mb-3"><a href="#" class="text-decoration-none text-muted hover-cyan"><i class="fas fa-angle-right me-2 small"></i> Refundable Tickets</a></li>
-                            <li class="mb-3"><a href="#" class="text-decoration-none text-muted hover-cyan"><i class="fas fa-angle-right me-2 small"></i> How To Cancel Online</a></li>
-                            <li><a href="#" class="text-decoration-none text-muted hover-cyan"><i class="fas fa-angle-right me-2 small"></i> Refund Process & Timing</a></li>
+                            <li class="mb-3"><a href="#" class="text-decoration-none text-muted hover-cyan"><i class="fas fa-angle-right me-2 small"></i> How To Change Online</a></li>
+                            <li><a href="#" class="text-decoration-none text-muted hover-cyan"><i class="fas fa-angle-right me-2 small"></i> Schedule Changes</a></li>
                         </ul>
                     </div>
                 </div>
@@ -191,7 +187,7 @@
 <!-- Related Posts Section -->
 <section class="py-5 bg-light">
     <div class="container pb-4">
-        <h3 class="fw-bold text-dark-blue mb-5">Related Post Cancellation Policy</h3>
+        <h3 class="fw-bold text-dark-blue mb-5">Related Post Flight Change Policy</h3>
         <div class="row g-4">
             @foreach($relatedAirlines as $related)
             <div class="col-lg-4 col-md-6" data-aos="fade-up" data-aos-delay="{{ $loop->index * 100 }}">

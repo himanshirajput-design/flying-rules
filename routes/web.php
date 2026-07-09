@@ -15,7 +15,14 @@ use Illuminate\Support\Facades\Route;
 
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\PolicyController;
+use App\Http\Controllers\FlightChangeController;
 
-Route::get('/', [HomeController::class, 'index']);
+Route::get('/', [HomeController::class, 'index'])->name('home');
+
+// Cancellation Policy Routes
 Route::get('/cancellation-policy', [PolicyController::class, 'index'])->name('cancellation.index');
 Route::get('/cancellation-policy/{airline}', [PolicyController::class, 'show'])->name('cancellation.show');
+
+// Flight Change Policy Routes
+Route::get('/flight-change', [FlightChangeController::class, 'index'])->name('flight-change.index');
+Route::get('/flight-change/{airline}', [FlightChangeController::class, 'show'])->name('flight-change.show');
