@@ -49,6 +49,7 @@
                     </div>
                 </div>
             </div>
+            @include('admin.policies.partials.faqs')
         </form>
     </div>
 </div>

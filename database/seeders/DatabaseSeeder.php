@@ -5,7 +5,6 @@ namespace Database\Seeders;
 use Illuminate\Database\Seeder;
 use App\Models\Airline;
 use App\Models\Policy;
-use App\Models\Post;
 
 class DatabaseSeeder extends Seeder
 {
@@ -48,25 +47,5 @@ class DatabaseSeeder extends Seeder
             }
         }
 
-        // 2. Seed Posts
-        $postsData = \App\Http\Controllers\BlogController::getPosts();
-        
-        foreach ($postsData as $slug => $post) {
-            // Reformat image asset URL back to relative path for DB
-            $imagePath = str_replace(asset(''), '', $post['image']);
-            
-            Post::updateOrCreate(
-                ['slug' => $slug],
-                [
-                    'title' => $post['title'],
-                    'excerpt' => $post['excerpt'],
-                    'content' => 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.',
-                    'image' => $imagePath,
-                    'author' => $post['author'],
-                    'category' => $post['category'],
-                    'published_at' => date('Y-m-d', strtotime($post['date'])),
-                ]
-            );
-        }
     }
 }

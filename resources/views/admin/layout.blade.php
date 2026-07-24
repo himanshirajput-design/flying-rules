@@ -206,14 +206,18 @@
             <div class="d-flex align-items-center">
                 <div class="dropdown">
                     <button class="btn btn-light bg-white border-0 dropdown-toggle d-flex align-items-center rounded-pill shadow-sm py-2 px-3" type="button" data-bs-toggle="dropdown">
-                        <img src="https://ui-avatars.com/api/?name=Admin&background=0ea5e9&color=fff&rounded=true" alt="Admin" width="32" height="32" class="me-2">
-                        <span class="fw-medium">Administrator</span>
+                        <img src="https://ui-avatars.com/api/?name={{ urlencode(auth()->user()->name) }}&background=0ea5e9&color=fff&rounded=true" alt="{{ auth()->user()->name }}" width="32" height="32" class="me-2">
+                        <span class="fw-medium">{{ auth()->user()->name }}</span>
                     </button>
                     <ul class="dropdown-menu dropdown-menu-end shadow border-0 mt-2 rounded-4">
-                        <li><a class="dropdown-item py-2" href="#"><i class="fas fa-user-circle me-2 text-muted"></i>Profile</a></li>
-                        <li><a class="dropdown-item py-2" href="#"><i class="fas fa-cog me-2 text-muted"></i>Settings</a></li>
+                        <li><a class="dropdown-item py-2" href="{{ route('profile.edit') }}"><i class="fas fa-user-circle me-2 text-muted"></i>Profile</a></li>
                         <li><hr class="dropdown-divider"></li>
-                        <li><a class="dropdown-item py-2 text-danger" href="#"><i class="fas fa-sign-out-alt me-2"></i>Logout</a></li>
+                        <li>
+                            <form method="POST" action="{{ route('logout') }}">
+                                @csrf
+                                <button type="submit" class="dropdown-item py-2 text-danger"><i class="fas fa-sign-out-alt me-2"></i>Logout</button>
+                            </form>
+                        </li>
                     </ul>
                 </div>
             </div>

@@ -8,42 +8,78 @@ use App\Models\Policy;
 
 class PolicyController extends Controller
 {
-    public static function getAirlines()
+    public function adminIndex()
     {
-        return Airline::all()->keyBy('slug')->toArray();
+        $policies = Policy::with('airline')->orderBy('airline_id')->get();
+        return view('admin.policies.index', compact('policies'));
     }
 
-    public function index(Request $request)
+    public function adminCreate()
     {
-        $airlines = Airline::paginate(6);
-        
-        $airlines->getCollection()->transform(function ($airline) {
-            $airline->link = route('cancellation.show', $airline->slug);
-            $airline->image = asset($airline->image);
-            return $airline;
-        });
-
-        return view('cancellation.index', ['airlines' => $airlines]);
+        $airlines = Airline::all();
+        $types = $this->policyTypes();
+        return view('admin.policies.create', compact('airlines', 'types'));
     }
 
-    public function show($airline)
+    public function adminStore(Request $request)
     {
-        $airlineModel = Airline::where('slug', $airline)->firstOrFail();
-        
-        $airlineData = $airlineModel->toArray();
-        $airlineData['image'] = asset($airlineData['image']);
-        $airlineData['policy'] = $airlineModel->policies()->where('type', 'cancellation')->first();
-        
-        $relatedAirlinesRaw = Airline::where('slug', '!=', $airline)->inRandomOrder()->take(3)->get();
-        $relatedAirlines = [];
-        foreach($relatedAirlinesRaw as $rel) {
-            $relatedAirlines[] = [
-                'name' => $rel->name,
-                'image' => asset($rel->image),
-                'link' => route('cancellation.show', $rel->slug)
-            ];
+        $validated = $this->validatePolicy($request);
+
+        if (Policy::where('airline_id', $validated['airline_id'])->where('type', $validated['type'])->exists()) {
+            return back()->withErrors([
+                'type' => "A {$validated['type']} policy already exists for this airline. Please edit it instead.",
+            ])->withInput();
         }
 
-        return view('cancellation.show', compact('airlineData', 'relatedAirlines'));
+        Policy::create($validated);
+        return redirect()->route('admin.policies.index')->with('success', 'Policy created successfully.');
+    }
+
+    public function adminEdit(Policy $policy)
+    {
+        $airlines = Airline::all();
+        $types = $this->policyTypes();
+        return view('admin.policies.edit', compact('policy', 'airlines', 'types'));
+    }
+
+    public function adminUpdate(Request $request, Policy $policy)
+    {
+        $validated = $this->validatePolicy($request);
+        $duplicateExists = Policy::where('airline_id', $validated['airline_id'])
+            ->where('type', $validated['type'])
+            ->whereKeyNot($policy->getKey())
+            ->exists();
+
+        if ($duplicateExists) {
+            return back()->withErrors([
+                'type' => "A {$validated['type']} policy already exists for this airline.",
+            ])->withInput();
+        }
+
+        $policy->update($validated);
+        return redirect()->route('admin.policies.index')->with('success', 'Policy updated successfully.');
+    }
+
+    public function adminDestroy(Policy $policy)
+    {
+        $policy->delete();
+        return redirect()->route('admin.policies.index')->with('success', 'Policy deleted successfully.');
+    }
+
+    private function validatePolicy(Request $request): array
+    {
+        return $request->validate([
+            'airline_id' => ['required', 'exists:airlines,id'],
+            'type' => ['required', 'string'],
+            'content' => ['required'],
+            'faqs' => ['nullable', 'array'],
+            'faqs.*.question' => ['required', 'string', 'max:500'],
+            'faqs.*.answer' => ['required', 'string', 'max:5000'],
+        ]);
+    }
+
+    private function policyTypes(): array
+    {
+        return ['cancellation', 'flight-change', 'name-change', 'reservation-policy', 'baggage-policy', 'refund-policy'];
     }
 }

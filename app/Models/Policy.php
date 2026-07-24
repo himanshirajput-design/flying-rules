@@ -9,7 +9,11 @@ class Policy extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['airline_id', 'type', 'content'];
+    protected $fillable = ['airline_id', 'type', 'content', 'faqs'];
+
+    protected $casts = [
+        'faqs' => 'array',
+    ];
 
     public function airline()
     {
