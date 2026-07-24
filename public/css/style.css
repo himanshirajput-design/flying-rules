@@ -42,6 +42,37 @@ body {
     transition: color 0.3s ease;
 }
 
+.cancellation-fees-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+    background: #fff;
+}
+
+.cancellation-fees-table th,
+.cancellation-fees-table td {
+    border: 1px solid #dee2e6;
+    padding: 16px;
+    text-align: left;
+    vertical-align: middle;
+}
+
+.cancellation-fees-table th {
+    background: #ffffff;
+    color: #0b1d3a;
+    font-size: 18px;
+    font-weight: 700;
+}
+
+.cancellation-fees-table tbody tr:nth-child(odd) {
+    background: #f8f9fa;
+}
+
+.cancellation-fees-table td {
+    font-size: 16px;
+    color: #333;
+}
+
 /* Header & Nav */
 .custom-header {
     background: rgba(255, 255, 255, 0.95);
@@ -289,3 +320,150 @@ body {
     background-color: rgba(14, 165, 233, 0.1);
     color: var(--accent-color);
 }
+/* Dynamic Policy Content Styles */
+.dynamic-policy-content h2 {
+    font-weight: 700;
+    color: #0f172a;
+    font-size: 1.75rem;
+    margin-bottom: 1.5rem;
+    margin-top: 2.5rem;
+}
+
+.dynamic-policy-content h3 {
+    background-color: rgba(14, 165, 233, 0.1); /* bg-light-cyan */
+    color: #0f172a;
+    padding: 1.5rem 1.5rem 1rem 1.5rem;
+    margin-bottom: 0;
+    border-left: 4px solid #0dcaf0; /* border-cyan */
+    border-top-left-radius: 1rem;
+    border-top-right-radius: 1rem;
+    font-size: 1.25rem;
+    font-weight: 700;
+}
+
+.dynamic-policy-content h3::before {
+    content: "\f0e7"; /* bolt icon */
+    font-family: "Font Awesome 5 Free";
+    font-weight: 900;
+    color: #0dcaf0;
+    margin-right: 0.5rem;
+}
+
+.dynamic-policy-content h3 + ul {
+    background-color: rgba(14, 165, 233, 0.1);
+    padding: 0 1.5rem 1.5rem 1.5rem;
+    border-left: 4px solid #0dcaf0;
+    border-bottom-left-radius: 1rem;
+    border-bottom-right-radius: 1rem;
+    margin-bottom: 3rem;
+    list-style: none;
+    color: #6c757d;
+}
+
+.dynamic-policy-content h3 + ul li {
+    margin-bottom: 1rem;
+    position: relative;
+    padding-left: 1.8rem;
+    line-height: 1.8;
+}
+
+.dynamic-policy-content h3 + ul li::before {
+    content: "\f058"; /* check-circle icon */
+    font-family: "Font Awesome 5 Free";
+    font-weight: 900;
+    color: #0dcaf0;
+    position: absolute;
+    left: 0;
+    top: 0.2rem;
+}
+
+.dynamic-policy-content p {
+    color: #6c757d;
+    line-height: 2;
+    margin-bottom: 1.5rem;
+}
+
+.dynamic-policy-content table {
+    width: 100%;
+    margin-bottom: 3rem;
+    border-collapse: collapse;
+    box-shadow: 0 .125rem .25rem rgba(0,0,0,.075);
+}
+
+.dynamic-policy-content table th {
+    background-color: #0f172a;
+    color: #fff;
+    padding: 1rem;
+    text-align: left;
+    border: 1px solid #dee2e6;
+    font-weight: bold;
+}
+
+.dynamic-policy-content table td {
+    padding: 1rem;
+    color: #6c757d;
+    border: 1px solid #dee2e6;
+}
+
+.dynamic-policy-content table tr:nth-child(even) {
+    background-color: #f8f9fa;
+}
+
+.dynamic-policy-content img {
+    max-width: 100%;
+    height: auto;
+    border-radius: 0.5rem;
+    margin-bottom: 1.5rem;
+}
+
+
+.dynamic-policy-content h3 + p + ul {
+    background-color: rgba(14, 165, 233, 0.1);
+    padding: 0 1.5rem 1.5rem 1.5rem;
+    border-left: 4px solid #0dcaf0;
+    border-bottom-left-radius: 1rem;
+    border-bottom-right-radius: 1rem;
+    margin-bottom: 3rem;
+    list-style: none;
+    color: #6c757d;
+    margin-top: -1.5rem; /* to pull it up over the empty p */
+}
+.dynamic-policy-content h3 + p + ul li {
+    margin-bottom: 1rem;
+    position: relative;
+    padding-left: 1.8rem;
+    line-height: 1.8;
+}
+.dynamic-policy-content h3 + p + ul li::before {
+    content: '\f058';
+    font-family: 'Font Awesome 5 Free';
+    font-weight: 900;
+    color: #0dcaf0;
+    position: absolute;
+    left: 0;
+    top: 0.2rem;
+}
+/* General UL styling (for lists not right after h3) */
+.dynamic-policy-content ul:not(.dynamic-policy-content h3 + ul):not(.dynamic-policy-content h3 + p + ul) {
+    list-style: none;
+    padding-left: 0;
+    color: #6c757d;
+    line-height: 2;
+    margin-bottom: 2rem;
+}
+.dynamic-policy-content ul:not(.dynamic-policy-content h3 + ul):not(.dynamic-policy-content h3 + p + ul) li {
+    margin-bottom: 1rem;
+    position: relative;
+    padding-left: 1.8rem;
+}
+.dynamic-policy-content ul:not(.dynamic-policy-content h3 + ul):not(.dynamic-policy-content h3 + p + ul) li::before {
+    content: '\f058';
+    font-family: 'Font Awesome 5 Free';
+    font-weight: 900;
+    color: #0dcaf0;
+    position: absolute;
+    left: 0;
+    top: 0.2rem;
+}
+
+

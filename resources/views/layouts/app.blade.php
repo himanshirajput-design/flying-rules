@@ -14,6 +14,9 @@
     
     <!-- Custom CSS -->
     <link rel="stylesheet" href="{{ asset('css/style.css') }}">
+    
+    <!-- Favicon -->
+    <link rel="icon" href="{{ asset('images/download.png') }}">
 </head>
 <body>
 
@@ -95,7 +98,7 @@
                                 @endforeach
                             </ul>
                         </li>                     
-                        <li class="nav-item"><a class="nav-link py-2 py-lg-0" href="#">Blog</a></li>
+                        <li class="nav-item"><a class="nav-link py-2 py-lg-0" href="{{ route('blog.index') }}">Blog</a></li>
                     </ul>
                     
                     <!-- Column 3: Phone Button -->
@@ -167,7 +170,7 @@
 <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
 <script>
     AOS.init({
-        duration: 800,
+        duration: 300,
         once: true,
         offset: 100
     });
@@ -184,5 +187,83 @@
     });
 </script>
 <script src="{{ asset('js/main.js') }}"></script>
+
+<!-- Exit Intent Popup Modal -->
+<div class="modal fade" id="exitIntentModal" tabindex="-1" aria-labelledby="exitIntentModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered modal-lg">
+    <div class="modal-content border-0 shadow-lg" style="border-radius: 20px; overflow: hidden; background-color: #ffffff;">
+      <div class="modal-body p-0 position-relative">
+        <button type="button" class="btn-close position-absolute top-0 end-0 m-3 shadow-sm bg-white rounded-circle p-2" style="z-index: 10;" data-bs-dismiss="modal" aria-label="Close"></button>
+        
+        <div class="row g-0">
+          <div class="col-md-5 d-none d-md-flex align-items-center justify-content-center position-relative" style="background: linear-gradient(135deg, #0b1121 0%, #1a2a4c 100%); min-height: 380px;">
+              <!-- Decorative circles -->
+              <div class="position-absolute rounded-circle" style="width: 150px; height: 150px; background: rgba(13, 202, 240, 0.05); top: -30px; left: -30px;"></div>
+              <div class="position-absolute rounded-circle" style="width: 100px; height: 100px; background: rgba(13, 202, 240, 0.05); bottom: 30px; right: -20px;"></div>
+              
+              <div class="text-center position-relative z-1 p-4">
+                  <div class="mb-3 d-inline-block p-3 rounded-circle" style="background: rgba(13, 202, 240, 0.1);">
+                      <i class="fas fa-plane-departure text-info" style="font-size: 3.5rem;"></i>
+                  </div>
+                  <h3 class="text-white fw-bold mb-1" style="letter-spacing: 1px;">FlyingRules</h3>
+                  <div class="badge bg-info text-dark rounded-pill px-3 py-1 mt-2 fw-bold">Exclusive Deal</div>
+              </div>
+          </div>
+          <div class="col-md-7 d-flex align-items-center">
+              <div class="p-4 p-lg-5 w-100 text-center">
+                  <div class="mb-3">
+                    <span class="badge bg-danger text-white rounded-pill px-3 py-2 shadow-sm" style="font-weight: 600; font-size: 0.85rem; letter-spacing: 1px;">
+                        <i class="fas fa-fire me-1"></i> LIMITED TIME OFFER
+                    </span>
+                  </div>
+                  <h2 class="fw-bold mb-3" style="color: #0b1121;">Wait! Before you go...</h2>
+                  <p class="text-secondary mb-4" style="font-size: 1.05rem;">
+                      Don't miss out on our special discount. Call us now and get <br>
+                      <span class="text-danger fw-bold" style="font-size: 1.4rem;">20% OFF</span> on your flight booking!
+                  </p>
+                  
+                  <div class="d-grid gap-3 px-2 px-md-4">
+                      <a href="tel:1234567890" class="btn btn-premium rounded-pill fw-bold py-3 shadow-sm d-flex align-items-center justify-content-center" style="font-size: 1.1rem; transition: all 0.3s ease;">
+                          <i class="fas fa-phone-alt me-2 icon-vibrate"></i> Claim 20% Off Now
+                      </a>
+                      <button type="button" class="btn btn-link text-muted text-decoration-none p-0 m-0" data-bs-dismiss="modal" style="font-size: 0.9rem; transition: color 0.3s ease;">No thanks, I'll pay full price</button>
+                  </div>
+              </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        let exitModalEl = document.getElementById('exitIntentModal');
+        if (!exitModalEl) return;
+        
+        let exitModal = new bootstrap.Modal(exitModalEl);
+        let popupShown = sessionStorage.getItem('exitIntentPopupShown');
+        let reopenTimeout;
+        
+        // Exit intent logic
+        document.addEventListener('mouseleave', function(e) {
+            // Check if cursor goes above the viewport
+            if (e.clientY < 0 && !popupShown) {
+                exitModal.show();
+                // Set flag in session storage so it doesn't fire multiple times on mouse leave
+                sessionStorage.setItem('exitIntentPopupShown', 'true');
+                popupShown = true;
+            }
+        });
+
+        // Automatically reopen after 20 seconds when closed
+        exitModalEl.addEventListener('hidden.bs.modal', function () {
+            clearTimeout(reopenTimeout);
+            reopenTimeout = setTimeout(function() {
+                exitModal.show();
+            }, 10000); // 10 seconds
+        });
+    });
+</script>
 </body>
 </html>

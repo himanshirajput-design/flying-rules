@@ -21,7 +21,7 @@
     <div class="container py-4">
         <div class="row g-5">
             <!-- Main Content -->
-            <div class="col-lg-8" data-aos="fade-up">
+            <div class="col-md-8" data-aos="fade-up">
                 
                 <!-- Large Featured Image -->
                 <div class="mb-5 rounded-4 overflow-hidden shadow-sm" style="height: 400px;">
@@ -29,75 +29,12 @@
                 </div>
 
 
-                <h2 class="fw-bold text-dark-blue mb-4">What is the Baggage Policy?</h2>
-                
-                <p class="text-muted lh-lg mb-4">
-                    Airlines have modernized their Baggage Policy policies to give passengers more flexibility. For most standard and premium tickets, you can now change your flight date, time, or destination without paying a hefty change fee. You will only be responsible for paying the fare difference if your new flight is more expensive than your original booking.
-                </p>
-                
-                <!-- Quick Overview Section -->
-                <div class="bg-light-cyan p-4 rounded-4 shadow-sm mb-5 border-start border-4 border-cyan">
-                    <h4 class="fw-bold text-dark-blue mb-4"><i class="fas fa-bolt text-cyan me-2"></i> Quick Overview</h4>
-                    <ul class="list-unstyled mb-0">
-                        <li class="mb-3 d-flex align-items-start"><i class="fas fa-check text-cyan mt-1 me-3"></i> <span class="text-muted"><strong>No Change Fees:</strong> Most standard tickets can be changed without penalty fees.</span></li>
-                        <li class="mb-3 d-flex align-items-start"><i class="fas fa-check text-cyan mt-1 me-3"></i> <span class="text-muted"><strong>Fare Differences:</strong> You are responsible for any difference if the new flight is more expensive.</span></li>
-                        <li class="mb-3 d-flex align-items-start"><i class="fas fa-check text-cyan mt-1 me-3"></i> <span class="text-muted"><strong>Basic Economy:</strong> Typically non-changeable after booking.</span></li>
-                        <li class="mb-0 d-flex align-items-start"><i class="fas fa-check text-cyan mt-1 me-3"></i> <span class="text-muted"><strong>Travel Credits:</strong> Remaining balances are usually issued as eCredits.</span></li>
-                    </ul>
-                </div>
-
-                <h3 class="fw-bold text-dark-blue mb-4">Fare Types & Change Rules</h3>
-                
-                <h5 class="fw-bold text-cyan mt-4">Basic Economy Tickets</h5>
-                <p class="text-muted lh-lg">Basic Economy tickets are generally strictly non-changeable. You cannot modify the date or time of these flights once the 24-hour grace period has passed.</p>
-                
-                <h5 class="fw-bold text-cyan mt-4">Main Cabin / Standard Tickets</h5>
-                <p class="text-muted lh-lg">Standard tickets can be changed with no change fees. However, you must pay any applicable fare difference. Changes can usually be made up until the time of departure.</p>
-
-                <h5 class="fw-bold text-cyan mt-4">Refundable / First Class Tickets</h5>
-                <p class="text-muted lh-lg mb-5">Fully refundable tickets offer the most flexibility, allowing unlimited changes without penalty fees, subject to fare differences.</p>
-
-                <h3 class="fw-bold text-dark-blue mb-4">How To Change Your Flight Online</h3>
-                <ul class="list-unstyled text-muted lh-lg mb-5">
-                    <li class="mb-3"><i class="fas fa-check-circle text-cyan me-2"></i> Visit the airline's official website and navigate to "Manage Booking" or "My Trips".</li>
-                    <li class="mb-3"><i class="fas fa-check-circle text-cyan me-2"></i> Enter your confirmation number (PNR) and the passenger's last name.</li>
-                    <li class="mb-3"><i class="fas fa-check-circle text-cyan me-2"></i> Select the flight you wish to change and click on the "Change Flight" option.</li>
-                    <li class="mb-3"><i class="fas fa-check-circle text-cyan me-2"></i> Search for your new preferred flight, pay any fare difference, and confirm your new itinerary.</li>
-                </ul>
-
-                <!-- Change Fee Table -->
-                <h3 class="fw-bold text-dark-blue mb-4">How Much Are the Change Fees?</h3>
-                <div class="table-responsive mb-5">
-                    <table class="table table-bordered table-striped align-middle shadow-sm">
-                        <thead class="bg-dark-blue text-white">
-                            <tr>
-                                <th class="p-3">Ticket Type</th>
-                                <th class="p-3">Change Fee</th>
-                                <th class="p-3">Fare Difference</th>
-                            </tr>
-                        </thead>
-                        <tbody class="text-muted">
-                            <tr>
-                                <td class="p-3 fw-bold">Basic Economy</td>
-                                <td class="p-3">Changes Not Permitted</td>
-                                <td class="p-3">N/A</td>
-                            </tr>
-                            <tr>
-                                <td class="p-3 fw-bold">Main Cabin / Standard</td>
-                                <td class="p-3">$0 (No Fee)</td>
-                                <td class="p-3">Applies</td>
-                            </tr>
-                            <tr>
-                                <td class="p-3 fw-bold">Refundable / First Class</td>
-                                <td class="p-3">$0 (No Fee)</td>
-                                <td class="p-3">Applies</td>
-                            </tr>
-                        </tbody>
-                    </table>
+                <div class="dynamic-policy-content">
+                    {!! $airlineData['policy']->content ?? '' !!}
                 </div>
 
                 <!-- FAQ Section -->
-                <h3 class="fw-bold text-dark-blue mb-4">Frequently Asked Questions</h3>
+                <h3 class="fw-bold text-dark-blue mb-4" id="faq">Frequently Asked Questions</h3>
                 <div class="accordion mb-5 shadow-sm" id="policyFaq">
                     <div class="accordion-item border-0 border-bottom">
                         <h2 class="accordion-header" id="headingOne">
@@ -162,7 +99,7 @@
             </div>
 
             <!-- Sidebar (Table of Contents) -->
-            <div class="col-lg-4" data-aos="fade-left">
+            <div class="col-md-4" data-aos="fade-left">
                 <div class="card border-0 shadow-sm rounded-4 sticky-top" style="top: 100px;">
                     <div class="card-header bg-dark-blue text-white p-4 rounded-top-4 border-0">
                         <h5 class="mb-0 fw-bold"><i class="fas fa-list-ul me-2 text-cyan"></i> Table of Contents</h5>

@@ -20,6 +20,7 @@ use App\Http\Controllers\NameChangeController;
 use App\Http\Controllers\ReservationPolicyController;
 use App\Http\Controllers\BaggagePolicyController;
 use App\Http\Controllers\RefundPolicyController;
+use App\Http\Controllers\BlogController;
 
 Route::get('/', [HomeController::class, 'index'])->name('home');
 
@@ -46,3 +47,20 @@ Route::get('/baggage-policy/{airline}', [BaggagePolicyController::class, 'show']
 // Refund Policy Routes
 Route::get('/refund-policy', [RefundPolicyController::class, 'index'])->name('refund-policy.index');
 Route::get('/refund-policy/{airline}', [RefundPolicyController::class, 'show'])->name('refund-policy.show');
+
+// Blog Routes
+Route::get('/blog', [BlogController::class, 'index'])->name('blog.index');
+Route::get('/blog/{slug}', [BlogController::class, 'show'])->name('blog.show');
+
+// Admin Routes
+use App\Http\Controllers\Admin\AdminController;
+use App\Http\Controllers\Admin\AirlineController as AdminAirlineController;
+use App\Http\Controllers\Admin\PolicyController as AdminPolicyController;
+use App\Http\Controllers\Admin\PostController as AdminPostController;
+
+Route::prefix('admin')->name('admin.')->group(function () {
+    Route::get('/', [AdminController::class, 'dashboard'])->name('dashboard');
+    Route::resource('airlines', AdminAirlineController::class);
+    Route::resource('policies', AdminPolicyController::class);
+    Route::resource('posts', AdminPostController::class);
+});
