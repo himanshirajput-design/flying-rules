@@ -65,4 +65,50 @@ class WebsiteAirlinePageTest extends TestCase
         $response->assertDontSee('Where can I find the latest Baggage Policy?');
         $response->assertDontSee('faqCollapse3', false);
     }
+
+    public function test_policy_accordion_lists_current_airline_first_and_five_other_airlines(): void
+    {
+        $currentAirline = Airline::create([
+            'name' => 'Current Air',
+            'slug' => 'current-air',
+            'image' => 'images/current.png',
+        ]);
+
+        Policy::create([
+            'airline_id' => $currentAirline->id,
+            'type' => 'cancellation',
+            'content' => '<p>Cancellation content</p>',
+        ]);
+        Policy::create([
+            'airline_id' => $currentAirline->id,
+            'type' => 'baggage-policy',
+            'content' => '<p>Baggage content</p>',
+        ]);
+
+        foreach (range(1, 5) as $number) {
+            $airline = Airline::create([
+                'name' => "Other Air {$number}",
+                'slug' => "other-air-{$number}",
+                'image' => "images/other-{$number}.png",
+            ]);
+
+            Policy::create([
+                'airline_id' => $airline->id,
+                'type' => 'cancellation',
+                'content' => '<p>Other cancellation content</p>',
+            ]);
+        }
+
+        $response = $this->get(route('cancellation.show', $currentAirline->slug));
+
+        $response->assertOk();
+        $response->assertSee('Policies of Current Air');
+        $response->assertSee('Baggage Policy');
+        $response->assertSee(route('baggage-policy.show', $currentAirline->slug), false);
+        $this->assertSame(6, substr_count($response->getContent(), 'Policies of '));
+        $this->assertStringNotContainsString(
+            route('cancellation.show', $currentAirline->slug).'" class="airline-policy-link"',
+            $response->getContent()
+        );
+    }
 }

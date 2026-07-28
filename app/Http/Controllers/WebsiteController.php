@@ -173,7 +173,39 @@ class WebsiteController extends Controller
             'link' => route($policyMeta['show_route'], $related->slug),
         ])->all();
 
-        return view('website.airlines.show', compact('airlineData', 'relatedAirlines', 'policyMeta'));
+        $policyAirlines = collect([$airlineModel->load('policies')])
+            ->concat(
+                Airline::with('policies')
+                    ->where('slug', '!=', $slug)
+                    ->inRandomOrder()
+                    ->take(5)
+                    ->get()
+            )
+            ->map(function (Airline $accordionAirline, int $index) use ($type) {
+                $policies = $accordionAirline->policies;
+
+                if ($index === 0) {
+                    $policies = $policies->where('type', '!=', $type);
+                }
+
+                return [
+                    'name' => $accordionAirline->name,
+                    'policies' => $policies
+                        ->map(function ($policy) use ($accordionAirline) {
+                            $meta = $this->policyMeta($policy->type);
+
+                            return [
+                                'title' => $meta['title'],
+                                'link' => route($meta['show_route'], $accordionAirline->slug),
+                            ];
+                        })
+                        ->values()
+                        ->all(),
+                ];
+            })
+            ->all();
+
+        return view('website.airlines.show', compact('airlineData', 'relatedAirlines', 'policyAirlines', 'policyMeta'));
     }
 
     private function normalizePolicyHtml(?string $html): string

@@ -133,4 +133,34 @@
         </div>
     </div>
 </section>
+
+<!-- Airline Policies Accordion -->
+<section class="airline-policies-section py-5 bg-white">
+    <div class="container py-3">
+        <div class="accordion airline-policies-accordion" id="airlinePoliciesAccordion">
+            @foreach($policyAirlines as $airline)
+                @php
+                    $headingId = 'airlinePoliciesHeading'.$loop->iteration;
+                    $collapseId = 'airlinePoliciesCollapse'.$loop->iteration;
+                @endphp
+                <div class="accordion-item">
+                    <h2 class="accordion-header" id="{{ $headingId }}">
+                        <button class="accordion-button {{ $loop->first ? '' : 'collapsed' }}" type="button" data-bs-toggle="collapse" data-bs-target="#{{ $collapseId }}" aria-expanded="{{ $loop->first ? 'true' : 'false' }}" aria-controls="{{ $collapseId }}">
+                            Policies of {{ $airline['name'] }}
+                        </button>
+                    </h2>
+                    <div id="{{ $collapseId }}" class="accordion-collapse collapse {{ $loop->first ? 'show' : '' }}" aria-labelledby="{{ $headingId }}" data-bs-parent="#airlinePoliciesAccordion">
+                        <div class="accordion-body">
+                            @forelse($airline['policies'] as $policy)
+                                <a href="{{ $policy['link'] }}" class="airline-policy-link">{{ $policy['title'] }}</a>
+                            @empty
+                                <p class="text-muted mb-0">No other policies are available for this airline yet.</p>
+                            @endforelse
+                        </div>
+                    </div>
+                </div>
+            @endforeach
+        </div>
+    </div>
+</section>
 @endsection

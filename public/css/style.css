@@ -466,4 +466,68 @@ body {
     top: 0.2rem;
 }
 
+/* Airline policy links accordion */
+.airline-policies-accordion .accordion-item {
+    border: 0;
+    border-bottom: 1px solid #d5ddeb;
+    border-radius: 0;
+}
+
+.airline-policies-accordion .accordion-button {
+    padding: 1.5rem 0;
+    color: #06155c;
+    background: transparent;
+    box-shadow: none;
+    font-size: 1.25rem;
+    font-weight: 700;
+}
+
+.airline-policies-accordion .accordion-button::after {
+    width: 2rem;
+    height: 2rem;
+    margin-left: auto;
+    border: 1px solid #cbd5e1;
+    border-radius: 50%;
+    background-image: none;
+    content: '+';
+    color: #06155c;
+    font-size: 1.5rem;
+    font-weight: 400;
+    line-height: 1.75rem;
+    text-align: center;
+    transform: none;
+}
+
+.airline-policies-accordion .accordion-button:not(.collapsed)::after {
+    content: '\2212';
+}
+
+.airline-policies-accordion .accordion-body {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: .5rem;
+    padding: 0 0 1.5rem;
+}
+
+.airline-policy-link {
+    display: block;
+    min-height: 3.25rem;
+    padding: .85rem 1rem;
+    border: 1px solid #cbd5e1;
+    border-radius: .5rem;
+    color: #071ac8;
+    text-decoration: none;
+    transition: border-color .2s ease, background-color .2s ease;
+}
+
+.airline-policy-link:hover {
+    border-color: #0ea5e9;
+    background-color: rgba(14, 165, 233, .05);
+}
+
+@media (max-width: 767.98px) {
+    .airline-policies-accordion .accordion-body {
+        grid-template-columns: 1fr;
+    }
+}
 
