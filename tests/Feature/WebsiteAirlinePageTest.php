@@ -41,18 +41,43 @@ class WebsiteAirlinePageTest extends TestCase
         $response = $this->get(route('cancellation.show', $airline->slug));
 
         $response->assertOk();
-        $this->assertSame(1, substr_count($response->getContent(), 'Frequently Asked Questions'));
+        $response->assertDontSee('Frequently Asked Questions');
         $response->assertDontSee('Duplicated stored FAQ');
-        $response->assertSee('faqCollapse5', false);
+        $response->assertDontSee('Table of Contents');
+        $response->assertDontSee('Related Cancellation Policy');
+        $response->assertDontSee('Policies of Example Airlines');
         $response->assertSeeInOrder([
             '<div class="outer"><div class="inner">Policy text</div></div>',
-            '<!-- FAQ Section -->',
-            '<!-- Sidebar (Table of Contents) -->',
-            '<div class="col-md-4"',
+            '<!-- Author Profile -->',
         ], false);
     }
 
-    public function test_policy_uses_the_faqs_managed_from_the_admin_panel(): void
+    public function test_empty_optional_sections_and_missing_airline_image_are_hidden(): void
+    {
+        $airline = Airline::create([
+            'name' => 'Minimal Air',
+            'slug' => 'minimal-air',
+            'image' => null,
+        ]);
+
+        Policy::create([
+            'airline_id' => $airline->id,
+            'type' => 'cancellation',
+            'content' => '<p>Only policy content</p>',
+        ]);
+
+        $response = $this->get(route('cancellation.show', $airline->slug));
+
+        $response->assertOk();
+        $response->assertSee('Only policy content');
+        $response->assertDontSee('<img src="" alt="Minimal Air"', false);
+        $response->assertDontSee('Frequently Asked Questions');
+        $response->assertDontSee('Table of Contents');
+        $response->assertDontSee('Related Cancellation Policy');
+        $response->assertDontSee('Policies of Minimal Air');
+    }
+
+    public function test_detail_page_renders_only_faqs_managed_from_the_admin_panel(): void
     {
         $airline = Airline::create([
             'name' => 'Managed FAQ Airlines',
@@ -73,10 +98,37 @@ class WebsiteAirlinePageTest extends TestCase
         $response = $this->get(route('baggage-policy.show', $airline->slug));
 
         $response->assertOk();
+        $response->assertSee('Frequently Asked Questions');
         $response->assertSee('What is my baggage allowance?');
+        $response->assertSee('Your allowance is shown on your ticket.');
         $response->assertSee('Can I add another bag?');
-        $response->assertDontSee('Where can I find the latest Baggage Policy?');
-        $response->assertDontSee('faqCollapse3', false);
+        $response->assertSee('Yes, subject to the applicable fee.');
+        $response->assertSee('faqCollapse2', false);
+    }
+
+    public function test_table_of_contents_lists_only_headings_available_in_policy_content(): void
+    {
+        $airline = Airline::create([
+            'name' => 'Contents Air',
+            'slug' => 'contents-air',
+            'image' => 'images/example.png',
+        ]);
+
+        Policy::create([
+            'airline_id' => $airline->id,
+            'type' => 'cancellation',
+            'content' => '<h2>Cancellation Charges</h2><p>Details</p><h3>Refund Timeline</h3>',
+        ]);
+
+        $response = $this->get(route('cancellation.show', $airline->slug));
+
+        $response->assertOk();
+        $response->assertSee('<h2 id="cancellation-charges">Cancellation Charges</h2>', false);
+        $response->assertSee('href="#cancellation-charges"', false);
+        $response->assertSee('href="#refund-timeline"', false);
+        $response->assertDontSee('Fare Types &amp; Rules', false);
+        $response->assertDontSee('Basic Economy Tickets');
+        $response->assertDontSee('Refundable Tickets');
     }
 
     public function test_policy_accordion_lists_current_airline_first_and_five_other_airlines(): void

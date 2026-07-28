@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Airline;
 use App\Models\Post;
 use Illuminate\Pagination\LengthAwarePaginator;
+use Illuminate\Support\Str;
 use Illuminate\View\View;
 
 class WebsiteController extends Controller
@@ -169,10 +170,19 @@ class WebsiteController extends Controller
         $airlineModel = Airline::where('slug', $slug)->firstOrFail();
         $policy = $airlineModel->policies()->where('type', $type)->firstOrFail();
         $airlineData = $airlineModel->toArray();
-        $airlineData['image'] = asset($airlineData['image']);
+        $airlineData['image'] = $airlineModel->image ? asset($airlineModel->image) : null;
         $airlineData['policy'] = $policy;
-        $airlineData['policy_content'] = $this->normalizePolicyHtml($policy->content);
-        $policyMeta['faqs'] = $policy->faqs ?: $policyMeta['faqs'];
+        $preparedPolicy = $this->preparePolicyHtml($policy->content);
+        $airlineData['policy_content'] = $preparedPolicy['html'];
+        $policyFaqs = $policy->faqs ?: [];
+        $tableOfContents = $preparedPolicy['toc'];
+
+        if ($policyFaqs) {
+            $tableOfContents[] = [
+                'title' => 'Frequently Asked Questions',
+                'anchor' => 'policyFaqTitle',
+            ];
+        }
 
         $relatedAirlines = Airline::where('slug', '!=', $slug)
             ->whereHas('policies', fn ($query) => $query->where('type', $type))
@@ -213,15 +223,17 @@ class WebsiteController extends Controller
                         ->all(),
                 ];
             })
+            ->filter(fn (array $airline) => ! empty($airline['policies']))
+            ->values()
             ->all();
 
-        return view('website.airlines.show', compact('airlineData', 'relatedAirlines', 'policyAirlines', 'policyMeta'));
+        return view('website.airlines.show', compact('airlineData', 'relatedAirlines', 'policyAirlines', 'policyFaqs', 'policyMeta', 'tableOfContents'));
     }
 
-    private function normalizePolicyHtml(?string $html): string
+    private function preparePolicyHtml(?string $html): array
     {
         if (blank($html)) {
-            return '';
+            return ['html' => '', 'toc' => []];
         }
 
         $html = preg_split(
@@ -242,7 +254,34 @@ class WebsiteController extends Controller
         $root = $document->getElementById('policy-content-root');
 
         if (! $root) {
-            return $html;
+            return ['html' => $html, 'toc' => []];
+        }
+
+        $tableOfContents = [];
+        $usedAnchors = [];
+        $headings = (new \DOMXPath($document))->query(
+            './/*[self::h1 or self::h2 or self::h3 or self::h4 or self::h5 or self::h6]',
+            $root
+        );
+
+        foreach ($headings as $heading) {
+            $title = trim($heading->textContent);
+
+            if ($title === '') {
+                continue;
+            }
+
+            $baseAnchor = Str::slug($heading->getAttribute('id') ?: $title) ?: 'policy-section';
+            $anchor = $baseAnchor;
+            $suffix = 2;
+
+            while (isset($usedAnchors[$anchor])) {
+                $anchor = $baseAnchor.'-'.$suffix++;
+            }
+
+            $usedAnchors[$anchor] = true;
+            $heading->setAttribute('id', $anchor);
+            $tableOfContents[] = ['title' => $title, 'anchor' => $anchor];
         }
 
         $normalized = '';
@@ -250,7 +289,7 @@ class WebsiteController extends Controller
             $normalized .= $document->saveHTML($node);
         }
 
-        return $normalized;
+        return ['html' => $normalized, 'toc' => $tableOfContents];
     }
 
     private function policyMeta(string $type): array
@@ -260,74 +299,33 @@ class WebsiteController extends Controller
                 'title' => 'Cancellation Policy',
                 'index_route' => 'cancellation.index',
                 'show_route' => 'cancellation.show',
-                'toc' => '24-Hour Cancellation Policy',
-                'action' => 'How To Cancel Online',
-                'timing' => 'Refund Process & Timing',
             ],
             'flight-change' => [
                 'title' => 'Flight Change Policy',
                 'index_route' => 'flight-change.index',
                 'show_route' => 'flight-change.show',
-                'toc' => 'Flight Change Policy',
-                'action' => 'How To Change Online',
-                'timing' => 'Schedule Changes',
             ],
             'name-change' => [
                 'title' => 'Name Change Policy',
                 'index_route' => 'name-change.index',
                 'show_route' => 'name-change.show',
-                'toc' => 'Name Correction Rules',
-                'action' => 'How To Request A Name Change',
-                'timing' => 'Processing Time',
             ],
             'reservation-policy' => [
                 'title' => 'Reservation Policy',
                 'index_route' => 'reservation-policy.index',
                 'show_route' => 'reservation-policy.show',
-                'toc' => 'Reservation Rules',
-                'action' => 'How To Manage A Reservation',
-                'timing' => 'Booking Timelines',
             ],
             'baggage-policy' => [
                 'title' => 'Baggage Policy',
                 'index_route' => 'baggage-policy.index',
                 'show_route' => 'baggage-policy.show',
-                'toc' => 'Baggage Allowance',
-                'action' => 'How To Add Baggage',
-                'timing' => 'Delayed And Lost Baggage',
             ],
             'refund-policy' => [
                 'title' => 'Refund Policy',
                 'index_route' => 'refund-policy.index',
                 'show_route' => 'refund-policy.show',
-                'toc' => 'Refund Eligibility',
-                'action' => 'How To Request A Refund',
-                'timing' => 'Refund Process & Timing',
             ],
         };
-
-        $meta['faqs'] = [
-            [
-                'question' => "Where can I find the latest {$meta['title']}?",
-                'answer' => 'Review the policy details on this page and confirm the latest rules with the airline before making changes to your booking.',
-            ],
-            [
-                'question' => 'Do the rules vary by ticket or fare type?',
-                'answer' => 'Yes. Basic, standard, flexible, refundable, award, and promotional fares can have different allowances, fees, and restrictions.',
-            ],
-            [
-                'question' => 'Can I manage this request online?',
-                'answer' => 'Many requests can be handled through the airline’s Manage Booking section. Complex cases may require assistance from customer support.',
-            ],
-            [
-                'question' => 'What information should I have ready?',
-                'answer' => 'Keep your booking reference, passenger name, ticket number, travel dates, and any supporting documents available.',
-            ],
-            [
-                'question' => 'How long does processing usually take?',
-                'answer' => 'Processing time depends on the request and payment method. Contact the airline if the published processing period has passed.',
-            ],
-        ];
 
         return $meta;
     }

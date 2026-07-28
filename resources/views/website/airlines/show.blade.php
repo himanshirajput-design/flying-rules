@@ -23,43 +23,49 @@
         <div class="container py-4">
             <div class="row g-4">
                 <!-- Main Content -->
-                <div class="col-md-8" data-aos="fade-up">
+                <div class="{{ empty($tableOfContents) ? 'col-12' : 'col-md-8' }}" data-aos="fade-up">
 
-                    <div class="mb-5 rounded-4 overflow-hidden shadow-sm" style="height: 400px;">
-                        <img src="{{ $airlineData['image'] }}" alt="{{ $airlineData['name'] }}"
-                            class="w-100 h-100 object-fit-cover transition-scale">
-                    </div>
+                    @if (!empty($airlineData['image']))
+                        <div class="mb-5 rounded-4 overflow-hidden shadow-sm" style="height: 400px;">
+                            <img src="{{ $airlineData['image'] }}" alt="{{ $airlineData['name'] }}"
+                                class="w-100 h-100 object-fit-cover transition-scale">
+                        </div>
+                    @endif
 
+                    @if (!blank($airlineData['policy_content']))
+                        <div class="dynamic-policy-content">
+                            {!! $airlineData['policy_content'] !!}
+                        </div>
+                    @endif
 
-                    <div class="dynamic-policy-content">
-                        {!! $airlineData['policy_content'] !!}
-                    </div>
-
-                    <!-- FAQ Section -->
-                    <h3 class="fw-bold text-dark-blue mb-4" id="faq">Frequently Asked Questions</h3>
-                    <div class="accordion mb-5 shadow-sm" id="policyFaq">
-                        @foreach ($policyMeta['faqs'] as $faq)
-                            <div class="accordion-item border-0 border-bottom">
-                                <h2 class="accordion-header" id="faqHeading{{ $loop->iteration }}">
-                                    <button
-                                        class="accordion-button {{ $loop->first ? '' : 'collapsed' }} bg-light fw-bold text-dark-blue"
-                                        type="button" data-bs-toggle="collapse"
-                                        data-bs-target="#faqCollapse{{ $loop->iteration }}"
-                                        aria-expanded="{{ $loop->first ? 'true' : 'false' }}"
-                                        aria-controls="faqCollapse{{ $loop->iteration }}">
-                                        {{ $faq['question'] }}
-                                    </button>
-                                </h2>
-                                <div id="faqCollapse{{ $loop->iteration }}"
-                                    class="accordion-collapse collapse {{ $loop->first ? 'show' : '' }}"
-                                    aria-labelledby="faqHeading{{ $loop->iteration }}" data-bs-parent="#policyFaq">
-                                    <div class="accordion-body text-muted lh-lg">
-                                        {{ $faq['answer'] }}
+                    @if (!empty($policyFaqs))
+                        <section class="policy-faq-section mb-5" aria-labelledby="policyFaqTitle">
+                            <h3 class="fw-bold text-dark-blue mb-3" id="policyFaqTitle">Frequently Asked Questions</h3>
+                            <div class="accordion mb-5 shadow-sm" id="policyFaq">
+                                @foreach ($policyFaqs as $faq)
+                                    <div class="accordion-item border-0 border-bottom">
+                                        <h2 class="accordion-header" id="faqHeading{{ $loop->iteration }}">
+                                            <button
+                                                class="accordion-button {{ $loop->first ? '' : 'collapsed' }} bg-light fw-bold text-dark-blue"
+                                                type="button" data-bs-toggle="collapse"
+                                                data-bs-target="#faqCollapse{{ $loop->iteration }}"
+                                                aria-expanded="{{ $loop->first ? 'true' : 'false' }}"
+                                                aria-controls="faqCollapse{{ $loop->iteration }}">
+                                                {{ $faq['question'] }}
+                                            </button>
+                                        </h2>
+                                        <div id="faqCollapse{{ $loop->iteration }}"
+                                            class="accordion-collapse collapse {{ $loop->first ? 'show' : '' }}"
+                                            aria-labelledby="faqHeading{{ $loop->iteration }}" data-bs-parent="#policyFaq">
+                                            <div class="accordion-body text-muted lh-lg">
+                                                {{ $faq['answer'] }}
+                                            </div>
+                                        </div>
                                     </div>
-                                </div>
+                                @endforeach
                             </div>
-                        @endforeach
-                    </div>
+                        </section>
+                    @endif
 
                     <!-- Author Profile -->
                     <div
@@ -102,41 +108,34 @@
                     </div>
                 </div>
 
-                <!-- Sidebar (Table of Contents) -->
-                <div class="col-md-4" data-aos="fade-left">
-                    <div class="card border-0 shadow-sm rounded-4 sticky-top" style="top: 100px;">
-                        <div class="card-header bg-dark-blue text-white p-4 rounded-top-4 border-0">
-                            <h5 class="mb-0 fw-bold"><i class="fas fa-list-ul me-2 text-cyan"></i> Table of Contents</h5>
-                        </div>
-                        <div class="card-body p-4 bg-light rounded-bottom-4">
-                            <ul class="list-unstyled mb-0 toc-list">
-                                <li class="mb-3"><a href="#" class="text-decoration-none text-muted hover-cyan"><i
-                                            class="fas fa-angle-right me-2 small"></i> {{ $policyMeta['toc'] }}</a></li>
-                                <li class="mb-3"><a href="#" class="text-decoration-none text-muted hover-cyan"><i
-                                            class="fas fa-angle-right me-2 small"></i> Fare Types & Rules</a></li>
-                                <li class="mb-3"><a href="#" class="text-decoration-none text-muted hover-cyan"><i
-                                            class="fas fa-angle-right me-2 small"></i> Basic Economy Tickets</a></li>
-                                <li class="mb-3"><a href="#" class="text-decoration-none text-muted hover-cyan"><i
-                                            class="fas fa-angle-right me-2 small"></i> Standard Tickets</a></li>
-                                <li class="mb-3"><a href="#" class="text-decoration-none text-muted hover-cyan"><i
-                                            class="fas fa-angle-right me-2 small"></i> Refundable Tickets</a></li>
-                                <li class="mb-3"><a href="#"
-                                        class="text-decoration-none text-muted hover-cyan"><i
-                                            class="fas fa-angle-right me-2 small"></i> {{ $policyMeta['action'] }}</a>
-                                </li>
-                                <li><a href="#" class="text-decoration-none text-muted hover-cyan"><i
-                                            class="fas fa-angle-right me-2 small"></i> {{ $policyMeta['timing'] }}</a>
-                                </li>
-                            </ul>
+                @if (!empty($tableOfContents))
+                    <!-- Sidebar (Table of Contents) -->
+                    <div class="col-md-4" data-aos="fade-left">
+                        <div class="card border-0 shadow-sm rounded-4 sticky-top" style="top: 100px;">
+                            <div class="card-header bg-dark-blue text-white p-4 rounded-top-4 border-0">
+                                <h5 class="mb-0 fw-bold"><i class="fas fa-list-ul me-2 text-cyan"></i> Table of Contents</h5>
+                            </div>
+                            <div class="card-body p-4 bg-light rounded-bottom-4">
+                                <ul class="list-unstyled mb-0 toc-list">
+                                    @foreach ($tableOfContents as $item)
+                                        <li class="{{ $loop->last ? '' : 'mb-3' }}">
+                                            <a href="#{{ $item['anchor'] }}" class="text-decoration-none text-muted hover-cyan">
+                                                <i class="fas fa-angle-right me-2 small"></i> {{ $item['title'] }}
+                                            </a>
+                                        </li>
+                                    @endforeach
+                                </ul>
+                            </div>
                         </div>
                     </div>
-                </div>
+                @endif
             </div>
         </div>
     </section>
 
-    <!-- Related Posts Section -->
-    <section class="py-5 bg-light">
+    @if (!empty($relatedAirlines))
+        <!-- Related Posts Section -->
+        <section class="py-5 bg-light">
         <div class="container pb-4">
             <h3 class="fw-bold text-dark-blue mb-5">Related {{ $policyMeta['title'] }}</h3>
             <div class="row g-4">
@@ -160,10 +159,12 @@
                 @endforeach
             </div>
         </div>
-    </section>
+        </section>
+    @endif
 
-    <!-- Airline Policies Accordion -->
-    <section class="airline-policies-section py-5 bg-white">
+    @if (!empty($policyAirlines))
+        <!-- Airline Policies Accordion -->
+        <section class="airline-policies-section py-5 bg-white">
         <div class="container py-3">
             <div class="accordion airline-policies-accordion" id="airlinePoliciesAccordion">
                 @foreach ($policyAirlines as $airline)
@@ -184,17 +185,16 @@
                             class="accordion-collapse collapse {{ $loop->first ? 'show' : '' }}"
                             aria-labelledby="{{ $headingId }}" data-bs-parent="#airlinePoliciesAccordion">
                             <div class="accordion-body">
-                                @forelse($airline['policies'] as $policy)
+                                @foreach($airline['policies'] as $policy)
                                     <a href="{{ $policy['link'] }}"
                                         class="airline-policy-link">{{ $policy['title'] }}</a>
-                                @empty
-                                    <p class="text-muted mb-0">No other policies are available for this airline yet.</p>
-                                @endforelse
+                                @endforeach
                             </div>
                         </div>
                     </div>
                 @endforeach
             </div>
         </div>
-    </section>
+        </section>
+    @endif
 @endsection
