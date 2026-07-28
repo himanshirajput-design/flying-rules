@@ -156,9 +156,9 @@
             </div>
         </div>
         
-        <hr class="border-light opacity-10 mt-5 mb-4">
+        <hr class="border-light opacity-10 mt-5 mb-3">
         
-        <div class="text-center text-light opacity-50 small">
+        <div class="text-center text-light opacity-50 small mb-2">
             &copy; 2026 FlightRules. All rights reserved.
         </div>
     </div>
