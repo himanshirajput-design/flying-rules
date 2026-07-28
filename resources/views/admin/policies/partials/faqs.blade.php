@@ -34,7 +34,7 @@
         </div>
 
         <div id="faq-empty" class="text-center text-muted border rounded-3 bg-white p-4 {{ count($faqRows) ? 'd-none' : '' }}">
-            No custom FAQs yet. The website will use the default FAQs until you add one.
+            No FAQs added. This section will remain hidden on the website until you add one.
         </div>
     </div>
 </div>

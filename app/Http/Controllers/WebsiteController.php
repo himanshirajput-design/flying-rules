@@ -264,10 +264,23 @@ class WebsiteController extends Controller
             $root
         );
 
-        foreach ($headings as $heading) {
+        foreach (iterator_to_array($headings) as $heading) {
             $title = trim($heading->textContent);
 
-            if ($title === '') {
+            if ($title === '' || ! $this->headingHasContent($heading)) {
+                $node = $heading;
+
+                while ($node) {
+                    $nextNode = $node->nextSibling;
+                    $node->parentNode?->removeChild($node);
+
+                    if ($nextNode instanceof \DOMElement && preg_match('/^h[1-6]$/i', $nextNode->tagName)) {
+                        break;
+                    }
+
+                    $node = $nextNode;
+                }
+
                 continue;
             }
 
@@ -290,6 +303,33 @@ class WebsiteController extends Controller
         }
 
         return ['html' => $normalized, 'toc' => $tableOfContents];
+    }
+
+    private function headingHasContent(\DOMElement $heading): bool
+    {
+        for ($node = $heading->nextSibling; $node; $node = $node->nextSibling) {
+            if ($node instanceof \DOMElement && preg_match('/^h[1-6]$/i', $node->tagName)) {
+                return false;
+            }
+
+            if (trim($node->textContent) !== '') {
+                return true;
+            }
+
+            if ($node instanceof \DOMElement) {
+                $media = (new \DOMXPath($heading->ownerDocument))->query(
+                    'self::img or self::table or self::ul or self::ol or self::video or self::audio or self::iframe'
+                    .' | .//*[self::img or self::table or self::ul or self::ol or self::video or self::audio or self::iframe]',
+                    $node
+                );
+
+                if ($media->length > 0) {
+                    return true;
+                }
+            }
+        }
+
+        return false;
     }
 
     private function policyMeta(string $type): array

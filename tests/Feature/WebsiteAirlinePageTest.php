@@ -117,7 +117,7 @@ class WebsiteAirlinePageTest extends TestCase
         Policy::create([
             'airline_id' => $airline->id,
             'type' => 'cancellation',
-            'content' => '<h2>Cancellation Charges</h2><p>Details</p><h3>Refund Timeline</h3>',
+            'content' => '<h2>Cancellation Charges</h2><p>Details</p><h3>Empty Section</h3><p><br></p><h3>Refund Timeline</h3><p>Seven business days.</p>',
         ]);
 
         $response = $this->get(route('cancellation.show', $airline->slug));
@@ -126,6 +126,8 @@ class WebsiteAirlinePageTest extends TestCase
         $response->assertSee('<h2 id="cancellation-charges">Cancellation Charges</h2>', false);
         $response->assertSee('href="#cancellation-charges"', false);
         $response->assertSee('href="#refund-timeline"', false);
+        $response->assertDontSee('Empty Section');
+        $response->assertDontSee('href="#empty-section"', false);
         $response->assertDontSee('Fare Types &amp; Rules', false);
         $response->assertDontSee('Basic Economy Tickets');
         $response->assertDontSee('Refundable Tickets');

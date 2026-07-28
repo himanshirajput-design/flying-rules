@@ -68,7 +68,7 @@ class PolicyController extends Controller
 
     private function validatePolicy(Request $request): array
     {
-        return $request->validate([
+        $validated = $request->validate([
             'airline_id' => ['required', 'exists:airlines,id'],
             'type' => ['required', 'string'],
             'content' => ['required'],
@@ -76,6 +76,10 @@ class PolicyController extends Controller
             'faqs.*.question' => ['required', 'string', 'max:500'],
             'faqs.*.answer' => ['required', 'string', 'max:5000'],
         ]);
+
+        $validated['faqs'] = $validated['faqs'] ?? [];
+
+        return $validated;
     }
 
     private function policyTypes(): array
