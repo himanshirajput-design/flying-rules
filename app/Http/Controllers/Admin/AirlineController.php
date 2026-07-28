@@ -11,7 +11,7 @@ class AirlineController extends Controller
 {
     public function index()
     {
-        $airlines = Airline::all();
+        $airlines = Airline::with('policies')->get();
         return view('admin.airlines.index', compact('airlines'));
     }
 

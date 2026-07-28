@@ -11,6 +11,19 @@ class WebsiteAirlinePageTest extends TestCase
 {
     use RefreshDatabase;
 
+    public function test_detail_page_returns_not_found_when_policy_has_not_been_created(): void
+    {
+        $airline = Airline::create([
+            'name' => 'No Policy Air',
+            'slug' => 'no-policy-air',
+            'image' => 'images/example.png',
+        ]);
+
+        $this->get(route('cancellation.show', $airline->slug))->assertNotFound();
+        $this->get(route('cancellation.index'))->assertDontSee('No Policy Air');
+        $this->get(route('home'))->assertDontSee('No Policy Air');
+    }
+
     public function test_unclosed_policy_html_does_not_break_the_detail_page_columns(): void
     {
         $airline = Airline::create([

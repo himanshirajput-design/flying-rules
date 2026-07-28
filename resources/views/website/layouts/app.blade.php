@@ -52,7 +52,7 @@
                             <ul class="dropdown-menu shadow border-0 fade-down" aria-labelledby="cancellationDropdown">
             
                                 @php
-                                    $airlinesDropdown = \App\Http\Controllers\WebsiteController::getAirlines();
+                                    $airlinesDropdown = \App\Http\Controllers\WebsiteController::getAirlines('cancellation');
                                 @endphp
                                 @foreach($airlinesDropdown as $slug => $data)
                                     <li><a class="dropdown-item" href="{{ route('cancellation.show', $slug) }}">{{ $data['name'] }}</a></li>
@@ -65,7 +65,7 @@
                             </a>
                             <ul class="dropdown-menu shadow border-0 fade-down" aria-labelledby="flightChangeDropdown">
                                 @php
-                                    $fcDropdown = \App\Http\Controllers\WebsiteController::getAirlines();
+                                    $fcDropdown = \App\Http\Controllers\WebsiteController::getAirlines('flight-change');
                                 @endphp
                                 @foreach($fcDropdown as $slug => $data)
                                     <li><a class="dropdown-item" href="{{ route('flight-change.show', $slug) }}">{{ $data['name'] }}</a></li>
@@ -78,7 +78,7 @@
                             </a>
                             <ul class="dropdown-menu shadow border-0 fade-down" aria-labelledby="nameChangeDropdown">
                                 @php
-                                    $ncDropdown = \App\Http\Controllers\WebsiteController::getAirlines();
+                                    $ncDropdown = \App\Http\Controllers\WebsiteController::getAirlines('name-change');
                                 @endphp
                                 @foreach($ncDropdown as $slug => $data)
                                     <li><a class="dropdown-item" href="{{ route('name-change.show', $slug) }}">{{ $data['name'] }}</a></li>
@@ -91,7 +91,7 @@
                             </a>
                             <ul class="dropdown-menu shadow border-0 fade-down" aria-labelledby="reservationPolicyDropdown">
                                 @php
-                                    $rpDropdown = \App\Http\Controllers\WebsiteController::getAirlines();
+                                    $rpDropdown = \App\Http\Controllers\WebsiteController::getAirlines('reservation-policy');
                                 @endphp
                                 @foreach($rpDropdown as $slug => $data)
                                     <li><a class="dropdown-item" href="{{ route('reservation-policy.show', $slug) }}">{{ $data['name'] }}</a></li>

@@ -9,14 +9,20 @@ use Illuminate\View\View;
 
 class WebsiteController extends Controller
 {
-    public static function getAirlines(): array
+    public static function getAirlines(?string $policyType = null): array
     {
-        return Airline::all()->keyBy('slug')->toArray();
+        $query = Airline::query();
+
+        if ($policyType) {
+            $query->whereHas('policies', fn ($policies) => $policies->where('type', $policyType));
+        }
+
+        return $query->get()->keyBy('slug')->toArray();
     }
 
     public function home(): View
     {
-        $airlines = collect(self::getAirlines())->map(function (array $airline, string $slug) {
+        $airlines = collect(self::getAirlines('cancellation'))->map(function (array $airline, string $slug) {
             return [
                 'name' => $airline['name'],
                 'image' => $airline['image'],
@@ -55,7 +61,7 @@ class WebsiteController extends Controller
 
     public function cancellationIndex(): View
     {
-        return $this->policyIndex('cancellation.show', 'website.cancellation.index');
+        return $this->policyIndex('cancellation', 'cancellation.show', 'website.cancellation.index');
     }
 
     public function cancellationShow(string $airline): View
@@ -65,7 +71,7 @@ class WebsiteController extends Controller
 
     public function flightChangeIndex(): View
     {
-        return $this->policyIndex('flight-change.show', 'website.flight-change.index');
+        return $this->policyIndex('flight-change', 'flight-change.show', 'website.flight-change.index');
     }
 
     public function flightChangeShow(string $airline): View
@@ -75,7 +81,7 @@ class WebsiteController extends Controller
 
     public function nameChangeIndex(): View
     {
-        return $this->policyIndex('name-change.show', 'website.name-change.index');
+        return $this->policyIndex('name-change', 'name-change.show', 'website.name-change.index');
     }
 
     public function nameChangeShow(string $airline): View
@@ -85,7 +91,7 @@ class WebsiteController extends Controller
 
     public function reservationPolicyIndex(): View
     {
-        return $this->policyIndex('reservation-policy.show', 'website.reservation-policy.index');
+        return $this->policyIndex('reservation-policy', 'reservation-policy.show', 'website.reservation-policy.index');
     }
 
     public function reservationPolicyShow(string $airline): View
@@ -95,7 +101,7 @@ class WebsiteController extends Controller
 
     public function baggagePolicyIndex(): View
     {
-        return $this->policyIndex('baggage-policy.show', 'website.baggage-policy.index');
+        return $this->policyIndex('baggage-policy', 'baggage-policy.show', 'website.baggage-policy.index');
     }
 
     public function baggagePolicyShow(string $airline): View
@@ -105,7 +111,7 @@ class WebsiteController extends Controller
 
     public function refundPolicyIndex(): View
     {
-        return $this->policyIndex('refund-policy.show', 'website.refund-policy.index');
+        return $this->policyIndex('refund-policy', 'refund-policy.show', 'website.refund-policy.index');
     }
 
     public function refundPolicyShow(string $airline): View
@@ -145,9 +151,9 @@ class WebsiteController extends Controller
         return view('website.blog.show', compact('post', 'relatedPosts'));
     }
 
-    private function policyIndex(string $showRoute, string $view): View
+    private function policyIndex(string $type, string $showRoute, string $view): View
     {
-        $airlines = Airline::paginate(6);
+        $airlines = Airline::whereHas('policies', fn ($query) => $query->where('type', $type))->paginate(6);
         $airlines->getCollection()->transform(function (Airline $airline) use ($showRoute) {
             $airline->link = route($showRoute, $airline->slug);
             $airline->image = asset($airline->image);
@@ -161,13 +167,16 @@ class WebsiteController extends Controller
     {
         $policyMeta = $this->policyMeta($type);
         $airlineModel = Airline::where('slug', $slug)->firstOrFail();
+        $policy = $airlineModel->policies()->where('type', $type)->firstOrFail();
         $airlineData = $airlineModel->toArray();
         $airlineData['image'] = asset($airlineData['image']);
-        $airlineData['policy'] = $airlineModel->policies()->where('type', $type)->first();
-        $airlineData['policy_content'] = $this->normalizePolicyHtml($airlineData['policy']?->content);
-        $policyMeta['faqs'] = $airlineData['policy']?->faqs ?: $policyMeta['faqs'];
+        $airlineData['policy'] = $policy;
+        $airlineData['policy_content'] = $this->normalizePolicyHtml($policy->content);
+        $policyMeta['faqs'] = $policy->faqs ?: $policyMeta['faqs'];
 
-        $relatedAirlines = Airline::where('slug', '!=', $slug)->inRandomOrder()->take(3)->get()->map(fn (Airline $related) => [
+        $relatedAirlines = Airline::where('slug', '!=', $slug)
+            ->whereHas('policies', fn ($query) => $query->where('type', $type))
+            ->inRandomOrder()->take(3)->get()->map(fn (Airline $related) => [
             'name' => $related->name,
             'image' => asset($related->image),
             'link' => route($policyMeta['show_route'], $related->slug),
@@ -177,6 +186,7 @@ class WebsiteController extends Controller
             ->concat(
                 Airline::with('policies')
                     ->where('slug', '!=', $slug)
+                    ->whereHas('policies')
                     ->inRandomOrder()
                     ->take(5)
                     ->get()
