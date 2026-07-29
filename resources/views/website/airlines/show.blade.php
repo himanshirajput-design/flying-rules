@@ -10,7 +10,7 @@
                 <h1 class="display-4 fw-bold mb-3">{{ $airlineData['name'] }}</h1>
                 <div class="breadcrumb text-light fs-5 opacity-75">
                     <a href="/" class="text-white text-decoration-none hover-cyan">FlightRules</a> &nbsp;&gt;&nbsp;
-                    <a href="{{ route($policyMeta['index_route']) }}"
+                    <a href="{{ $policyMeta['index_route'] ? route($policyMeta['index_route']) : route('airlines.show', $airlineData['slug']) }}"
                         class="text-white text-decoration-none hover-cyan">{{ $policyMeta['title'] }}</a> &nbsp;&gt;&nbsp;
                     <span>{{ explode(' ', $airlineData['name'])[0] }}</span>
                 </div>

@@ -16,7 +16,7 @@
 <h5 class="fw-bold text-muted mb-4">Quick Statistics</h5>
 <div class="row g-4 mb-5">
     <!-- Airlines Stat -->
-    <div class="col-md-4">
+    <div class="col-md-3">
         <div class="card shadow-sm border-0 h-100">
             <div class="card-body p-4 d-flex align-items-center">
                 <div class="rounded-circle bg-primary bg-opacity-10 text-primary d-flex align-items-center justify-content-center me-4" style="width: 60px; height: 60px;">
@@ -36,7 +36,7 @@
     </div>
 
     <!-- Policies Stat -->
-    <div class="col-md-4">
+    <div class="col-md-3">
         <div class="card shadow-sm border-0 h-100">
             <div class="card-body p-4 d-flex align-items-center">
                 <div class="rounded-circle bg-success bg-opacity-10 text-success d-flex align-items-center justify-content-center me-4" style="width: 60px; height: 60px;">
@@ -55,8 +55,28 @@
         </div>
     </div>
 
+    <!-- Policy Types Stat -->
+    <div class="col-md-3">
+        <div class="card shadow-sm border-0 h-100">
+            <div class="card-body p-4 d-flex align-items-center">
+                <div class="rounded-circle bg-info bg-opacity-10 text-info d-flex align-items-center justify-content-center me-4" style="width: 60px; height: 60px;">
+                    <i class="fas fa-tags fs-4"></i>
+                </div>
+                <div>
+                    <p class="text-muted mb-1 fw-medium text-uppercase text-xs" style="letter-spacing: 1px; font-size: 0.8rem;">Policy Types</p>
+                    <h3 class="fw-bold mb-0 text-dark">{{ \App\Models\PolicyType::count() }}</h3>
+                </div>
+            </div>
+            <div class="card-footer bg-white border-top-0 pt-0 pb-4 px-4">
+                <a href="{{ route('admin.policy-types.index') }}" class="text-info text-decoration-none fw-medium small d-flex align-items-center group">
+                    Manage Types <i class="fas fa-arrow-right ms-2 transition-transform group-hover:translate-x-1"></i>
+                </a>
+            </div>
+        </div>
+    </div>
+
     <!-- Posts Stat -->
-    <div class="col-md-4">
+    <div class="col-md-3">
         <div class="card shadow-sm border-0 h-100">
             <div class="card-body p-4 d-flex align-items-center">
                 <div class="rounded-circle bg-warning bg-opacity-10 text-warning d-flex align-items-center justify-content-center me-4" style="width: 60px; height: 60px;">

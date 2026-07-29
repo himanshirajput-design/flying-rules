@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Airline;
 use App\Models\Post;
+use App\Models\PolicyType;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Str;
 use Illuminate\View\View;
@@ -19,6 +20,23 @@ class WebsiteController extends Controller
         }
 
         return $query->get()->keyBy('slug')->toArray();
+    }
+
+    public static function policyUrl(string $type, string $airline): string
+    {
+        $route = match ($type) {
+            'cancellation' => 'cancellation.show',
+            'flight-change' => 'flight-change.show',
+            'name-change' => 'name-change.show',
+            'reservation-policy' => 'reservation-policy.show',
+            'baggage-policy' => 'baggage-policy.show',
+            'refund-policy' => 'refund-policy.show',
+            default => null,
+        };
+
+        return $route
+            ? route($route, $airline)
+            : route('policy-types.show', ['type' => $type, 'airline' => $airline]);
     }
 
     public function home(): View
@@ -68,11 +86,18 @@ class WebsiteController extends Controller
 
             return [
                 'title' => $meta['title'],
-                'link' => route($meta['show_route'], $airlineModel->slug),
+                'link' => self::policyUrl($policy->type, $airlineModel->slug),
             ];
         })->values();
 
         return view('website.airlines.index', compact('airlineModel', 'policies'));
+    }
+
+    public function customPolicyShow(string $type, string $airline): View
+    {
+        PolicyType::where('slug', $type)->firstOrFail();
+
+        return $this->policyShow($airline, $type);
     }
 
     public function cancellationIndex(): View
@@ -204,7 +229,7 @@ class WebsiteController extends Controller
             ->inRandomOrder()->take(3)->get()->map(fn (Airline $related) => [
             'name' => $related->name,
             'image' => asset($related->image),
-            'link' => route($policyMeta['show_route'], $related->slug),
+            'link' => self::policyUrl($type, $related->slug),
         ])->all();
 
         $policyAirlines = collect([$airlineModel->load('policies')])
@@ -231,7 +256,7 @@ class WebsiteController extends Controller
 
                             return [
                                 'title' => $meta['title'],
-                                'link' => route($meta['show_route'], $accordionAirline->slug),
+                                'link' => self::policyUrl($policy->type, $accordionAirline->slug),
                             ];
                         })
                         ->values()
@@ -349,7 +374,7 @@ class WebsiteController extends Controller
 
     private function policyMeta(string $type): array
     {
-        $meta = match ($type) {
+        return match ($type) {
             'cancellation' => [
                 'title' => 'Cancellation Policy',
                 'index_route' => 'cancellation.index',
@@ -380,8 +405,11 @@ class WebsiteController extends Controller
                 'index_route' => 'refund-policy.index',
                 'show_route' => 'refund-policy.show',
             ],
+            default => [
+                'title' => PolicyType::where('slug', $type)->value('name') ?? Str::headline($type),
+                'index_route' => null,
+                'show_route' => 'policy-types.show',
+            ],
         };
-
-        return $meta;
     }
 }

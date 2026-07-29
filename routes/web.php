@@ -3,6 +3,7 @@
 use App\Http\Controllers\Admin\AdminController;
 use App\Http\Controllers\Admin\AirlineController as AdminAirlineController;
 use App\Http\Controllers\Admin\PostController as AdminPostController;
+use App\Http\Controllers\Admin\PolicyTypeController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\PolicyController;
 use App\Http\Controllers\WebsiteController;
@@ -11,6 +12,7 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', [WebsiteController::class, 'home'])->name('home');
 
 Route::get('/airlines/{airline}', [WebsiteController::class, 'airlineShow'])->name('airlines.show');
+Route::get('/policies/{type}/{airline}', [WebsiteController::class, 'customPolicyShow'])->name('policy-types.show');
 
 Route::get('/cancellation-policy', [WebsiteController::class, 'cancellationIndex'])->name('cancellation.index');
 Route::get('/cancellation-policy/{airline}', [WebsiteController::class, 'cancellationShow'])->name('cancellation.show');
@@ -37,6 +39,7 @@ Route::middleware('auth')->group(function () {
     Route::prefix('admin')->name('admin.')->group(function () {
         Route::get('/', [AdminController::class, 'dashboard'])->name('dashboard');
         Route::resource('airlines', AdminAirlineController::class);
+        Route::resource('policy-types', PolicyTypeController::class)->except('show');
         Route::get('policies', [PolicyController::class, 'adminIndex'])->name('policies.index');
         Route::get('policies/create', [PolicyController::class, 'adminCreate'])->name('policies.create');
         Route::post('policies', [PolicyController::class, 'adminStore'])->name('policies.store');

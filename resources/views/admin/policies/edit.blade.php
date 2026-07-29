@@ -32,7 +32,7 @@
                         <select name="type" class="form-select" required>
                             <option value="">Select Type...</option>
                             @foreach($types as $type)
-                                <option value="{{ $type }}" {{ old('type', $policy->type) == $type ? 'selected' : '' }}>{{ ucwords(str_replace('-', ' ', $type)) }}</option>
+                                <option value="{{ $type->slug }}" {{ old('type', $policy->type) == $type->slug ? 'selected' : '' }}>{{ $type->name }}</option>
                             @endforeach
                         </select>
                     </div>

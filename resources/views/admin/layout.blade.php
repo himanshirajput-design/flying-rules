@@ -185,6 +185,11 @@
                 </a>
             </li>
             <li>
+                <a href="{{ route('admin.policy-types.index') }}" class="{{ request()->routeIs('admin.policy-types.*') ? 'active' : '' }}">
+                    <i class="fas fa-tags"></i> Policy Types
+                </a>
+            </li>
+            <li>
                 <a href="{{ route('admin.posts.index') }}" class="{{ request()->routeIs('admin.posts.*') ? 'active' : '' }}">
                     <i class="fas fa-blog"></i> Blog Posts
                 </a>
@@ -230,6 +235,12 @@
                     <i class="fas fa-check-circle fs-4 me-3 text-success"></i>
                     <div>{{ session('success') }}</div>
                     <button type="button" class="btn-close ms-auto position-relative" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+            @endif
+            @if(session('error'))
+                <div class="alert alert-danger alert-dismissible fade show shadow-sm border-0" role="alert">
+                    <i class="fas fa-exclamation-circle me-2"></i>{{ session('error') }}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
                 </div>
             @endif
             

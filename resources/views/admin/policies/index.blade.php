@@ -29,7 +29,7 @@
                     </td>
                     <td><span class="badge bg-secondary text-capitalize">{{ str_replace('-', ' ', $item->type) }}</span></td>
                     <td class="text-end">
-                        <a href="{{ route($item->type . '.show', $item->airline->slug) }}" target="_blank" class="btn btn-sm btn-outline-info me-1" title="View on Site"><i class="fas fa-eye"></i></a>
+                        <a href="{{ \App\Http\Controllers\WebsiteController::policyUrl($item->type, $item->airline->slug) }}" target="_blank" class="btn btn-sm btn-outline-info me-1" title="View on Site"><i class="fas fa-eye"></i></a>
                         <a href="{{ route('admin.policies.edit', $item->id) }}" class="btn btn-sm btn-outline-primary me-1" title="Edit"><i class="fas fa-edit"></i></a>
                         <form action="{{ route('admin.policies.destroy', $item->id) }}" method="POST" class="d-inline-block" onsubmit="return confirm('Are you sure you want to delete this policy?');">
                             @csrf

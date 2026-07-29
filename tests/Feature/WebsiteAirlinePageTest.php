@@ -4,6 +4,7 @@ namespace Tests\Feature;
 
 use App\Models\Airline;
 use App\Models\Policy;
+use App\Models\PolicyType;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 
@@ -38,6 +39,29 @@ class WebsiteAirlinePageTest extends TestCase
         $response->assertDontSee(route('flight-change.show', $airline->slug), false);
         $response->assertSee(route('cancellation.show', $airline->slug), false);
         $response->assertSee(route('baggage-policy.show', $airline->slug), false);
+    }
+
+    public function test_custom_policy_type_is_listed_and_has_a_working_detail_page(): void
+    {
+        $airline = Airline::create([
+            'name' => 'Custom Air',
+            'slug' => 'custom-air',
+        ]);
+        PolicyType::create([
+            'name' => 'Pet Travel Policy',
+            'slug' => 'pet-travel',
+        ]);
+        Policy::create([
+            'airline_id' => $airline->id,
+            'type' => 'pet-travel',
+            'content' => '<p>Pet travel details</p>',
+        ]);
+
+        $overview = $this->get(route('airlines.show', $airline->slug));
+        $detailUrl = route('policy-types.show', ['type' => 'pet-travel', 'airline' => $airline->slug]);
+
+        $overview->assertOk()->assertSee('Pet Travel Policy')->assertSee($detailUrl, false);
+        $this->get($detailUrl)->assertOk()->assertSee('Pet Travel Policy')->assertSee('Pet travel details');
     }
 
     public function test_detail_page_returns_not_found_when_policy_has_not_been_created(): void

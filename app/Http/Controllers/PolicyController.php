@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Airline;
 use App\Models\Policy;
+use App\Models\PolicyType;
+use Illuminate\Validation\Rule;
 
 class PolicyController extends Controller
 {
@@ -17,7 +19,7 @@ class PolicyController extends Controller
     public function adminCreate()
     {
         $airlines = Airline::all();
-        $types = $this->policyTypes();
+        $types = PolicyType::orderBy('name')->get();
         return view('admin.policies.create', compact('airlines', 'types'));
     }
 
@@ -38,7 +40,7 @@ class PolicyController extends Controller
     public function adminEdit(Policy $policy)
     {
         $airlines = Airline::all();
-        $types = $this->policyTypes();
+        $types = PolicyType::orderBy('name')->get();
         return view('admin.policies.edit', compact('policy', 'airlines', 'types'));
     }
 
@@ -70,7 +72,7 @@ class PolicyController extends Controller
     {
         $validated = $request->validate([
             'airline_id' => ['required', 'exists:airlines,id'],
-            'type' => ['required', 'string'],
+            'type' => ['required', 'string', Rule::exists('policy_types', 'slug')],
             'content' => ['required'],
             'faqs' => ['nullable', 'array'],
             'faqs.*.question' => ['required', 'string', 'max:500'],
@@ -82,8 +84,4 @@ class PolicyController extends Controller
         return $validated;
     }
 
-    private function policyTypes(): array
-    {
-        return ['cancellation', 'flight-change', 'name-change', 'reservation-policy', 'baggage-policy', 'refund-policy'];
-    }
 }
