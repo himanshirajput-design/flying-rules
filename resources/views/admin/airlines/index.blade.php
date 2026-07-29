@@ -33,8 +33,8 @@
                     </td>
                     <td><span class="badge bg-light text-dark border">{{ $item->slug }}</span></td>
                     <td class="text-end">
-                        @if($item->policies->contains('type', 'cancellation'))
-                            <a href="{{ route('cancellation.show', $item->slug) }}" target="_blank" class="btn btn-sm btn-outline-info me-1" title="View on Site"><i class="fas fa-eye"></i></a>
+                        @if($item->policies->isNotEmpty())
+                            <a href="{{ route('airlines.show', $item->slug) }}" target="_blank" class="btn btn-sm btn-outline-info me-1" title="View all policies on site"><i class="fas fa-eye"></i></a>
                         @endif
                         <a href="{{ route('admin.airlines.edit', $item->id) }}" class="btn btn-sm btn-outline-primary me-1" title="Edit"><i class="fas fa-edit"></i></a>
                         <form action="{{ route('admin.airlines.destroy', $item->id) }}" method="POST" class="d-inline-block" onsubmit="return confirm('Are you sure you want to delete this airline? This will also delete ALL related policies!');">

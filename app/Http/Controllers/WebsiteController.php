@@ -60,6 +60,21 @@ class WebsiteController extends Controller
         ]);
     }
 
+    public function airlineShow(string $airline): View
+    {
+        $airlineModel = Airline::with('policies')->where('slug', $airline)->firstOrFail();
+        $policies = $airlineModel->policies->map(function ($policy) use ($airlineModel) {
+            $meta = $this->policyMeta($policy->type);
+
+            return [
+                'title' => $meta['title'],
+                'link' => route($meta['show_route'], $airlineModel->slug),
+            ];
+        })->values();
+
+        return view('website.airlines.index', compact('airlineModel', 'policies'));
+    }
+
     public function cancellationIndex(): View
     {
         return $this->policyIndex('cancellation', 'cancellation.show', 'website.cancellation.index');

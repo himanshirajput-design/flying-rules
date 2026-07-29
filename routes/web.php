@@ -10,6 +10,8 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('/', [WebsiteController::class, 'home'])->name('home');
 
+Route::get('/airlines/{airline}', [WebsiteController::class, 'airlineShow'])->name('airlines.show');
+
 Route::get('/cancellation-policy', [WebsiteController::class, 'cancellationIndex'])->name('cancellation.index');
 Route::get('/cancellation-policy/{airline}', [WebsiteController::class, 'cancellationShow'])->name('cancellation.show');
 

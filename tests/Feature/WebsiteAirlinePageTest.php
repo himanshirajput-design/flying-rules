@@ -11,6 +11,35 @@ class WebsiteAirlinePageTest extends TestCase
 {
     use RefreshDatabase;
 
+    public function test_airline_page_lists_only_policies_created_for_that_airline(): void
+    {
+        $airline = Airline::create([
+            'name' => 'Policy Air',
+            'slug' => 'policy-air',
+        ]);
+
+        Policy::create([
+            'airline_id' => $airline->id,
+            'type' => 'cancellation',
+            'content' => '<p>Cancellation details</p>',
+        ]);
+        Policy::create([
+            'airline_id' => $airline->id,
+            'type' => 'baggage-policy',
+            'content' => '<p>Baggage details</p>',
+        ]);
+
+        $response = $this->get(route('airlines.show', $airline->slug));
+
+        $response->assertOk();
+        $response->assertSee('Policy Air');
+        $response->assertSee('Cancellation Policy');
+        $response->assertSee('Baggage Policy');
+        $response->assertDontSee(route('flight-change.show', $airline->slug), false);
+        $response->assertSee(route('cancellation.show', $airline->slug), false);
+        $response->assertSee(route('baggage-policy.show', $airline->slug), false);
+    }
+
     public function test_detail_page_returns_not_found_when_policy_has_not_been_created(): void
     {
         $airline = Airline::create([
