@@ -42,6 +42,11 @@ body {
     transition: color 0.3s ease;
 }
 
+b,
+strong {
+    color: #000;
+}
+
 .cancellation-fees-table {
     width: 100%;
     border-collapse: collapse;
@@ -320,6 +325,7 @@ body {
     background-color: rgba(14, 165, 233, 0.1);
     color: var(--accent-color);
 }
+
 /* Dynamic Policy Content Styles */
 .dynamic-policy-content h2 {
     font-weight: 700;
@@ -330,11 +336,13 @@ body {
 }
 
 .dynamic-policy-content h3 {
-    background-color: rgba(14, 165, 233, 0.1); /* bg-light-cyan */
+    background-color: rgba(14, 165, 233, 0.1);
+    /* bg-light-cyan */
     color: #0f172a;
     padding: 1.5rem 1.5rem 1rem 1.5rem;
     margin-bottom: 0;
-    border-left: 4px solid #0dcaf0; /* border-cyan */
+    border-left: 4px solid #0dcaf0;
+    /* border-cyan */
     border-top-left-radius: 1rem;
     border-top-right-radius: 1rem;
     font-size: 1.25rem;
@@ -342,14 +350,15 @@ body {
 }
 
 .dynamic-policy-content h3::before {
-    content: "\f0e7"; /* bolt icon */
+    content: "\f0e7";
+    /* bolt icon */
     font-family: "Font Awesome 5 Free";
     font-weight: 900;
     color: #0dcaf0;
     margin-right: 0.5rem;
 }
 
-.dynamic-policy-content h3 + ul {
+.dynamic-policy-content h3+ul {
     background-color: rgba(14, 165, 233, 0.1);
     padding: 0 1.5rem 1.5rem 1.5rem;
     border-left: 4px solid #0dcaf0;
@@ -360,15 +369,16 @@ body {
     color: #6c757d;
 }
 
-.dynamic-policy-content h3 + ul li {
+.dynamic-policy-content h3+ul li {
     margin-bottom: 1rem;
     position: relative;
     padding-left: 1.8rem;
     line-height: 1.8;
 }
 
-.dynamic-policy-content h3 + ul li::before {
-    content: "\f058"; /* check-circle icon */
+.dynamic-policy-content h3+ul li::before {
+    content: "\f058";
+    /* check-circle icon */
     font-family: "Font Awesome 5 Free";
     font-weight: 900;
     color: #0dcaf0;
@@ -387,7 +397,7 @@ body {
     width: 100%;
     margin-bottom: 3rem;
     border-collapse: collapse;
-    box-shadow: 0 .125rem .25rem rgba(0,0,0,.075);
+    box-shadow: 0 .125rem .25rem rgba(0, 0, 0, .075);
 }
 
 .dynamic-policy-content table th {
@@ -417,7 +427,7 @@ body {
 }
 
 
-.dynamic-policy-content h3 + p + ul {
+.dynamic-policy-content h3+p+ul {
     background-color: rgba(14, 165, 233, 0.1);
     padding: 0 1.5rem 1.5rem 1.5rem;
     border-left: 4px solid #0dcaf0;
@@ -426,15 +436,18 @@ body {
     margin-bottom: 3rem;
     list-style: none;
     color: #6c757d;
-    margin-top: -1.5rem; /* to pull it up over the empty p */
+    margin-top: -1.5rem;
+    /* to pull it up over the empty p */
 }
-.dynamic-policy-content h3 + p + ul li {
+
+.dynamic-policy-content h3+p+ul li {
     margin-bottom: 1rem;
     position: relative;
     padding-left: 1.8rem;
     line-height: 1.8;
 }
-.dynamic-policy-content h3 + p + ul li::before {
+
+.dynamic-policy-content h3+p+ul li::before {
     content: '\f058';
     font-family: 'Font Awesome 5 Free';
     font-weight: 900;
@@ -443,6 +456,7 @@ body {
     left: 0;
     top: 0.2rem;
 }
+
 /* General UL styling (for lists not right after h3) */
 .dynamic-policy-content ul:not(.dynamic-policy-content h3 + ul):not(.dynamic-policy-content h3 + p + ul) {
     list-style: none;
@@ -451,11 +465,13 @@ body {
     line-height: 2;
     margin-bottom: 2rem;
 }
+
 .dynamic-policy-content ul:not(.dynamic-policy-content h3 + ul):not(.dynamic-policy-content h3 + p + ul) li {
     margin-bottom: 1rem;
     position: relative;
     padding-left: 1.8rem;
 }
+
 .dynamic-policy-content ul:not(.dynamic-policy-content h3 + ul):not(.dynamic-policy-content h3 + p + ul) li::before {
     content: '\f058';
     font-family: 'Font Awesome 5 Free';

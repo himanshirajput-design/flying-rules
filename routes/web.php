@@ -10,7 +10,9 @@ use App\Http\Controllers\WebsiteController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', [WebsiteController::class, 'home'])->name('home');
-
+Route::get('/flights', [WebsiteController::class, 'flights'])->name('flights');
+Route::get('/airlines', [WebsiteController::class, 'airlinesIndex'])->name('airlines.index');
+Route::post('/flight-quote', [WebsiteController::class, 'storeQuote'])->name('flight-quote.store');
 Route::get('/airlines/{airline}', [WebsiteController::class, 'airlineShow'])->name('airlines.show');
 Route::get('/policies/{type}/{airline}', [WebsiteController::class, 'customPolicyShow'])->name('policy-types.show');
 

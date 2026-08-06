@@ -3,8 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\Models\Airline;
+use App\Models\FlightQuote;
 use App\Models\Post;
 use App\Models\PolicyType;
+use Illuminate\Http\Request;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Str;
 use Illuminate\View\View;
@@ -41,6 +43,11 @@ class WebsiteController extends Controller
 
     public function home(): View
     {
+        return view('website.home');
+    }
+
+    public function flights(): View
+    {
         $airlines = collect(self::getAirlines('cancellation'))->map(function (array $airline, string $slug) {
             return [
                 'name' => $airline['name'],
@@ -71,11 +78,41 @@ class WebsiteController extends Controller
             ['name' => 'Emma Watson', 'role' => 'Travel Blogger', 'quote' => 'The best resource for travel rules. Period. Highly recommended!', 'image' => asset('images/testimonial_avatar_1783532215709.png')],
         ];
 
-        return view('website.home', [
+        return view('website.flights', [
             'airlines' => $paginatedAirlines,
             'services' => $services,
             'testimonials' => $testimonials,
         ]);
+    }
+
+    public function airlinesIndex(): View
+    {
+        $airlines = Airline::paginate(6);
+        $airlines->getCollection()->transform(function (Airline $airline) {
+            $airline->link = route('airlines.show', $airline->slug);
+            $airline->image = $airline->image ? asset($airline->image) : null;
+            return $airline;
+        });
+
+        return view('website.airlines.list', compact('airlines'));
+    }
+
+    public function storeQuote(Request $request)
+    {
+        $validated = $request->validate([
+            'name' => 'required|string|max:255',
+            'email' => 'required|email|max:255',
+            'phone' => 'required|string|max:255',
+            'departure_city' => 'nullable|string|max:255',
+            'arrival_city' => 'nullable|string|max:255',
+            'departure_date' => 'nullable|string|max:255',
+            'return_date' => 'nullable|string|max:255',
+            'sms_updates' => 'boolean'
+        ]);
+
+        FlightQuote::create($validated);
+
+        return response()->json(['message' => 'Quote requested successfully!']);
     }
 
     public function airlineShow(string $airline): View

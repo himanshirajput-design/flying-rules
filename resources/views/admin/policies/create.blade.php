@@ -1,8 +1,6 @@
 @extends('admin.layout')
 
-@section('styles')
-<link href="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote-lite.min.css" rel="stylesheet">
-@endsection
+
 
 @section('content')
 <div class="d-flex justify-content-between align-items-center mb-4">
@@ -44,7 +42,7 @@
                 <div class="col-md-9">
                     <div class="mb-3">
                         <label class="form-label fw-bold">Policy Content *</label>
-                        <textarea name="content" id="summernote" required>{!! old('content', view('admin.policies.template')->render()) !!}</textarea>
+                        <textarea name="content" id="editor" required>{!! old('content', view('admin.policies.template')->render()) !!}</textarea>
                     </div>
                 </div>
             </div>
@@ -55,28 +53,11 @@
 @endsection
 
 @section('scripts')
-<script src="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote-lite.min.js"></script>
+<script src="https://cdn.ckeditor.com/4.22.1/standard/ckeditor.js"></script>
 <script>
     $(document).ready(function() {
-        $('#summernote').summernote({
-            placeholder: 'Write the policy details here...',
-            tabsize: 2,
-            height: 400,
-            toolbar: [
-                ['style', ['style']],
-                ['font', ['bold', 'underline', 'clear']],
-                ['color', ['color']],
-                ['para', ['ul', 'ol', 'paragraph']],
-                ['table', ['table']],
-                ['insert', ['link', 'picture', 'video']],
-                ['view', ['fullscreen', 'codeview', 'help']]
-            ]
-        });
-
-        $('form').on('submit', function() {
-            if ($('.note-editor').hasClass('codeview')) {
-                $('#summernote').val($('.note-codable').val());
-            }
+        CKEDITOR.replace('editor', {
+            height: 400
         });
     });
 </script>

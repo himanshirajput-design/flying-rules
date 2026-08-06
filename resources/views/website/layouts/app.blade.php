@@ -14,6 +14,7 @@
     
     <!-- Custom CSS -->
     <link rel="stylesheet" href="{{ asset('css/style.css') }}">
+    @yield('styles')
     
     <!-- Favicon -->
     <link rel="icon" href="{{ asset('images/download.png') }}">
@@ -131,6 +132,8 @@
             <div class="col-md-3">
                 <h5 class="footer-title text-white fw-bold mb-4 pb-2 position-relative">Quick Links</h5>
                 <ul class="list-unstyled footer-links m-0">
+                    <li class="mb-3"><a href="{{ route('flights') }}" class="text-light opacity-75 text-decoration-none d-flex align-items-center hover-cyan"><i class="fas fa-chevron-right text-cyan me-3 small"></i> Flights</a></li>
+                    <li class="mb-3"><a href="{{ route('airlines.index') }}" class="text-light opacity-75 text-decoration-none d-flex align-items-center hover-cyan"><i class="fas fa-chevron-right text-cyan me-3 small"></i> Airlines</a></li>
                     <li class="mb-3"><a href="{{ route('cancellation.index') }}" class="text-light opacity-75 text-decoration-none d-flex align-items-center hover-cyan"><i class="fas fa-chevron-right text-cyan me-3 small"></i> Cancellation Policy</a></li>
                     <li class="mb-3"><a href="{{ route('flight-change.index') }}" class="text-light opacity-75 text-decoration-none d-flex align-items-center hover-cyan"><i class="fas fa-chevron-right text-cyan me-3 small"></i> Flight Change Policy</a></li>
                     <li class="mb-3"><a href="{{ route('name-change.index') }}" class="text-light opacity-75 text-decoration-none d-flex align-items-center hover-cyan"><i class="fas fa-chevron-right text-cyan me-3 small"></i> Name Change Policy</a></li>
